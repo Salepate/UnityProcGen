@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="procgen-style.uss" />
+    <uie:Toolbar>
+        <uie:ToolbarButton text="Open" display-tooltip-when-elided="true" />
+        <uie:ToolbarButton text="Save" display-tooltip-when-elided="true" />
+    </uie:Toolbar>
+    <ui:VisualElement name="graphRoot" style="height: 100%;" />
+</ui:UXML>

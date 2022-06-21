@@ -1,0 +1,16 @@
+# Visual Studio files
+.vs/
+.vsconfig
+
+# Unity generated files
+Builds/
+Library/
+Logs/
+obj/
+Temp/
+Watchers/
+UserSettings/
+Recordings/
+*.csproj
+*.sln
+*.zip
