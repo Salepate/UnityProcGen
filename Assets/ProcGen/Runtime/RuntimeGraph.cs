@@ -5,6 +5,14 @@
     {
         public BaseNode[] Nodes = new BaseNode[0];
 
+        public void Initialize()
+        {
+            for(int i = 0; i < Nodes.Length; ++i)
+            {
+                Nodes[i].Initialize();
+            }
+        }
+
         public void EvaluateNode(int nodeIndex, bool recursive = true)
         {
             BaseNode targetNode = Nodes[nodeIndex];

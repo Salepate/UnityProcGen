@@ -9,21 +9,21 @@ namespace Dirt.ProcGen
     {
         public readonly ConnectorType ConnectorType;
         public BaseNode Source { get; private set; }
-        private int m_SourceOutputIndex;
+        public int SourceOutputIndex { get; private set; }
 
-        private NodeOutput m_SourceOutput => Source.Outputs[m_SourceOutputIndex];
+        private NodeOutput m_SourceOutput => Source.Outputs[SourceOutputIndex];
 
         public NodeConnector(ConnectorType cType)
         {
             ConnectorType = cType;
             Source = null;
-            m_SourceOutputIndex = -1;
+            SourceOutputIndex = -1;
         }
 
         public void Connect(BaseNode sourceNode, int outputIndex)
         {
             Source = sourceNode;
-            m_SourceOutputIndex = outputIndex;
+            SourceOutputIndex = outputIndex;
         }
 
         public static NodeConnector[] CreateInputs(params ConnectorType[] types) 
@@ -39,7 +39,7 @@ namespace Dirt.ProcGen
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsConnectorValid()
         {
-            bool sourceExists = Source != null && Source.Outputs != null && m_SourceOutputIndex < Source.Outputs.Length;
+            bool sourceExists = Source != null && Source.Outputs != null && SourceOutputIndex < Source.Outputs.Length;
             return sourceExists && ConnectorHelper.CanConvert(m_SourceOutput.ConnectorType, ConnectorType);
         }
 

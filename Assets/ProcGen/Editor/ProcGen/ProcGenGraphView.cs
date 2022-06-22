@@ -1,5 +1,6 @@
 using Dirt.ProcGen;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace ProcGenEditor
 {
     public class ProcGenGraphView : GraphView
     {
+        public RuntimeGraph GraphInstance { get; set; }
         public ProcGenGraphView()
         {
             GridBackground gridBg = new GridBackground();
@@ -36,7 +38,7 @@ namespace ProcGenEditor
                 Edge edge = changes.edgesToCreate[i];
                 ProcGenGraphNodeView sourceNodeView = (ProcGenGraphNodeView)edge.output.node;
                 ProcGenGraphNodeView nodeView = (ProcGenGraphNodeView)edge.input.node;
-                BaseNode sourceNode = nodeView.Node;
+                BaseNode sourceNode = sourceNodeView.Node;
 
                 sourceNodeView.TryGetPortData(edge.output, out int sourceSlot, out _);
                 nodeView.TryGetPortData(edge.input, out int slotIndex, out bool isOutput);
@@ -48,6 +50,18 @@ namespace ProcGenEditor
                 else
                 {
                     nodeView.Node.Inputs[slotIndex].Connect(sourceNode, sourceSlot);
+                }
+            }
+
+            if ( changes.elementsToRemove != null )
+            {
+                for(int i = 0; i < changes.elementsToRemove.Count; ++i)
+                {
+                    var elem = changes.elementsToRemove[i];
+                    if ( elem is ProcGenGraphNodeView nodeView)
+                    {
+                        ArrayUtility.Remove(ref GraphInstance.Nodes, nodeView.Node);
+                    }
                 }
             }
             return changes;

@@ -1,5 +1,7 @@
 using Dirt.ProcGen;
 using Dirt.Utility;
+using Newtonsoft.Json;
+using ProcGen.Serialization;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -11,7 +13,10 @@ namespace ProcGenEditor
 {
     public class ProcGenGraphEditor : EditorWindow
     {
+        public RuntimeGraph GraphInstance { get; private set; }
         private SearchWindowProvider m_Provider;
+        private GenerativeGraph m_ActiveGraph;
+        private JsonSerializerSettings m_SerializationSettings;
 
         [MenuItem("Proc Gen/Graph Editor")]
         private static void ShowMenu()
@@ -19,9 +24,11 @@ namespace ProcGenEditor
             ProcGenGraphEditor win = GetWindow<ProcGenGraphEditor>();
             win.position = new Rect(win.position.position, new Vector2(800f, 600f));
             win.Show(true);
+
+            win.LoadGenerativeGraph(ScriptableObject.CreateInstance<GenerativeGraph>());
         }
 
-        public static void QuickLoadGraph(GenGraph graph)
+        public static void QuickLoadGraph(GenerativeGraph graph)
         {
             ShowMenu();
             EditorWindow.GetWindow<ProcGenGraphEditor>().LoadGenerativeGraph(graph);
@@ -47,10 +54,62 @@ namespace ProcGenEditor
             m_Provider.Graph = graphView;
             m_Provider.Editor = this;
             graphView.styleSheets.Add(style);
+
+            VisualElement toolbar = rootVisualElement.Q<VisualElement>("editor-toolbar");
+            toolbar.Q<Button>("button-save").clicked += SaveGenerativeGraph;
+
+            // serial
+            m_SerializationSettings = new JsonSerializerSettings()
+            {
+                ContractResolver = new ProcGenContractResolver()
+            };
+
+            m_SerializationSettings.Converters.Add(new VectorConverter());
         }
 
-        private void LoadGenerativeGraph(GenGraph graph)
+        private void LoadGenerativeGraph(GenerativeGraph graph)
         {
+            m_ActiveGraph = graph;
+            GraphInstance = m_ActiveGraph.Deserialize(ProcGenSerialization.SerializationSettings, ProcGenSerialization.NodeConverter);
+            m_Provider.Graph.GraphInstance = GraphInstance;
+
+            List<ProcGenGraphNodeView> nodeViews = new List<ProcGenGraphNodeView>();
+
+            for(int i = 0; i < GraphInstance.Nodes.Length; ++i)
+            {
+                ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(GraphInstance.Nodes[i]);
+                nodeViews.Add(nodeView);
+                m_Provider.Graph.AddElement(nodeView);
+            }
+
+            for (int i = 0; i < nodeViews.Count; ++i)
+            {
+                ProcGenGraphNodeView nodeView = nodeViews[i];
+                for(int j = 0; j < nodeView.Node.Inputs.Length; ++j)
+                {
+                    ref NodeConnector input = ref nodeView.Node.Inputs[i];
+                    if ( input.IsConnectorValid())
+                    {
+                        int outputIndex = System.Array.IndexOf(GraphInstance.Nodes, input.Source);
+                        if ( nodeView.TryGetPort(j, false, out Port inputPort)
+                            && nodeViews[outputIndex].TryGetPort(input.SourceOutputIndex, true, out Port outputPort))
+                        {
+                            var edge = inputPort.ConnectTo(outputPort);
+                            m_Provider.Graph.Add(edge);
+                        }
+                        else
+                        {
+                            Debug.LogError($"Failed to reconnect edges {i} -> {outputIndex}");
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SaveGenerativeGraph()
+        {
+            m_ActiveGraph.SerializeGraph(GraphInstance, m_SerializationSettings);
+            EditorUtility.SetDirty(m_ActiveGraph);
         }
 
         private void OnKey(KeyDownEvent keyEvent)
@@ -74,9 +133,9 @@ namespace ProcGenEditor
         {
             private string[] m_Assemblies;
             
-            public GraphView Graph { get; set; }
+            public ProcGenGraphView Graph { get; set; }
             public VisualElement EditorRoot => Editor.rootVisualElement;
-            public EditorWindow Editor { get; set; }
+            public ProcGenGraphEditor Editor { get; set; }
 
             public SearchWindowProvider()
             {
@@ -106,10 +165,11 @@ namespace ProcGenEditor
             public bool OnSelectEntry(SearchTreeEntry searchEntry, SearchWindowContext context)
             {
                 BaseNode node = (BaseNode) System.Activator.CreateInstance((Type)searchEntry.userData);
+                node.Initialize();
                 ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(node);
-
                 var windowMousePosition = EditorRoot.ChangeCoordinatesTo(EditorRoot.parent, context.screenMousePosition - Editor.position.position);
                 var graphMousePosition = Graph.contentViewContainer.WorldToLocal(windowMousePosition);
+                ArrayUtility.Add(ref Editor.GraphInstance.Nodes, node);
                 Graph.AddElement(nodeView);
                 nodeView.SetOrigin(graphMousePosition);
                 return true;

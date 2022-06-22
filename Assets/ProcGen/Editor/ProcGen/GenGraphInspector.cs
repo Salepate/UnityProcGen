@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProcGenEditor.ProcGen
 {
-    [CustomEditor(typeof(GenGraph))]
+    [CustomEditor(typeof(GenerativeGraph))]
     public class GenGraphInspector : Editor
     {
         public override void OnInspectorGUI()
@@ -17,7 +17,7 @@ namespace ProcGenEditor.ProcGen
 
         private void OpenGraphEditor()
         {
-            ProcGenGraphEditor.QuickLoadGraph((GenGraph)target);
+            ProcGenGraphEditor.QuickLoadGraph((GenerativeGraph)target);
         }
     }
 }
