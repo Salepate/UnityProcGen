@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Dirt.ProcGen.GenerativeGraph;
 
 namespace ProcGenEditor
 {
@@ -36,30 +37,34 @@ namespace ProcGenEditor
         private void OnEnable()
         {
             var vt = Resources.Load<VisualTreeAsset>("window-procgen");
-            var style = Resources.Load<StyleSheet>("procgen-graph-style");
             var template =  vt.CloneTree();
             rootVisualElement.Add(template);
             template.StretchToParentSize();
-
-            ProcGenGraphView graphView = new ProcGenGraphView();
-            template.Q("graphRoot").Add(graphView);
-            graphView.StretchToParentSize();
-            graphView.AddManipulator(new ContentDragger());
-            graphView.AddManipulator(new SelectionDragger());
-            graphView.AddManipulator(new ClickSelector());
-            template.RegisterCallback<KeyDownEvent>(OnKey);
-
             m_Provider = ScriptableObject.CreateInstance<SearchWindowProvider>();
-            m_Provider.Graph = graphView;
             m_Provider.Editor = this;
-            graphView.styleSheets.Add(style);
-
             VisualElement toolbar = rootVisualElement.Q<VisualElement>("editor-toolbar");
             toolbar.Q<Button>("button-save").clicked += SaveGenerativeGraph;
         }
 
+        public void ResetGraph()
+        {
+            rootVisualElement.Q("graphRoot").Clear();
+            var style = Resources.Load<StyleSheet>("procgen-graph-style");
+            ProcGenGraphView graphView = new ProcGenGraphView();
+            rootVisualElement.Q("graphRoot").Add(graphView);
+            graphView.StretchToParentSize();
+            graphView.AddManipulator(new ContentDragger());
+            graphView.AddManipulator(new SelectionDragger());
+            graphView.AddManipulator(new ClickSelector());
+            rootVisualElement.Q("graphRoot").RegisterCallback<KeyDownEvent>(OnKey);
+
+            m_Provider.Graph = graphView;
+            graphView.styleSheets.Add(style);
+        }
+
         private void LoadGenerativeGraph(GenerativeGraph graph)
         {
+            ResetGraph();
             m_ActiveGraph = graph;
             GraphInstance = m_ActiveGraph.Deserialize(ProcGenSerialization.SerializationSettings, ProcGenSerialization.NodeConverter);
             m_Provider.Graph.GraphInstance = GraphInstance;
@@ -70,6 +75,7 @@ namespace ProcGenEditor
             {
                 ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(GraphInstance.Nodes[i]);
                 nodeViews.Add(nodeView);
+                nodeView.SetPosition(graph.Meta[i].Position);
                 m_Provider.Graph.AddElement(nodeView);
             }
 
@@ -100,6 +106,7 @@ namespace ProcGenEditor
         private void SaveGenerativeGraph()
         {
             m_ActiveGraph.SerializeGraph(GraphInstance, ProcGenSerialization.SerializationSettings);
+            m_ActiveGraph.Meta = m_Provider.Graph.SerializeNodeMeta(GraphInstance);
             EditorUtility.SetDirty(m_ActiveGraph);
         }
 

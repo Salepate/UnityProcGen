@@ -8,15 +8,16 @@ namespace Dirt.ProcGen
     [CreateAssetMenu(fileName = "gen_graph.asset", menuName ="Dirt/Generative Graph")]
     public class GenerativeGraph : ScriptableObject
     {
-        //public BaseNode[] Nodes = new BaseNode[0];
         public string SerializedGraph = "{}";
         public string[] NodeTypes = new string[0];
         public NodeConnection[] Connections = new NodeConnection[0];
         public InputDefaultValue[] Values = new InputDefaultValue[0];
+        public NodeMetadata[] Meta = new NodeMetadata[0];
         public void SerializeGraph(RuntimeGraph graph, JsonSerializerSettings settings)
         {
             List<NodeConnection> connections = new List<NodeConnection>();
             List<InputDefaultValue> values = new List<InputDefaultValue>();
+            List<NodeMetadata> meta = new List<NodeMetadata>();
 
             // nodes, edges, editor meta
             SerializedGraph = JsonConvert.SerializeObject(graph, settings);
@@ -26,11 +27,13 @@ namespace Dirt.ProcGen
                 BaseNode node = graph.Nodes[i];
                 NodeTypes[i] = node.GetType().FullName;
                 AddNodeConnections(graph.Nodes, node, connections, values);
+
             }
 
             Connections = connections.ToArray();
             Values = values.ToArray();
         }
+
 
         private static void AddNodeConnections(BaseNode[] nodeArray, BaseNode node, List<NodeConnection> connections, List<InputDefaultValue> values)
         {
@@ -75,6 +78,7 @@ namespace Dirt.ProcGen
         }
 
 
+
         [System.Serializable]
         public struct NodeConnection
         {
@@ -103,6 +107,12 @@ namespace Dirt.ProcGen
                 Slot = slot;
                 Value = value;
             }
+        }
+
+        [System.Serializable]
+        public struct NodeMetadata
+        {
+            public Rect Position;
         }
     }
 }

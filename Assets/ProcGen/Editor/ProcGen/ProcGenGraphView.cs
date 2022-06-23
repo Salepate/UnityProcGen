@@ -1,8 +1,11 @@
 using Dirt.ProcGen;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static Dirt.ProcGen.GenerativeGraph;
 
 namespace ProcGenEditor
 {
@@ -71,6 +74,22 @@ namespace ProcGenEditor
                 }
             }
             return changes;
+        }
+
+        public NodeMetadata[] SerializeNodeMeta(RuntimeGraph graph)
+        {
+            var nodeViews = contentContainer.Query<ProcGenGraphNodeView>();
+            NodeMetadata[] meta = new NodeMetadata[graph.Nodes.Length];
+
+            nodeViews.ForEach(n =>
+            {
+                int nodeIndex = System.Array.IndexOf(graph.Nodes, n.Node);
+                meta[nodeIndex] = new NodeMetadata()
+                {
+                    Position = n.GetPosition()
+                };
+            });
+            return meta;
         }
     }
 }
