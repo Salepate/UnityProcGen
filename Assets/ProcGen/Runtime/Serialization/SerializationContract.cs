@@ -14,7 +14,6 @@ namespace ProcGen.Serialization
         public static BaseNodeConverter NodeConverter { get; private set; }
         static ProcGenSerialization()
         {
-            // serial
             NodeConverter = new BaseNodeConverter();
             SerializationSettings = new JsonSerializerSettings()
             {
@@ -32,13 +31,12 @@ namespace ProcGen.Serialization
             var props = base.CreateProperties(type, memberSerialization);
             for(int i = props.Count - 1; i >= 0; --i)
             {
-                if (type.GetField(props[i].PropertyName) == null)
+                if (type.GetField(props[i].PropertyName) == null) // keep fields only
                     props.RemoveAt(i);
             }
             return props;
         }
     }
-
     public class BaseNodeConverter : JsonConverter
     {
         private string[] m_TypeArray;

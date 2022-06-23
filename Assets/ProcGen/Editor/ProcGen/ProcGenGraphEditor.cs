@@ -16,7 +16,6 @@ namespace ProcGenEditor
         public RuntimeGraph GraphInstance { get; private set; }
         private SearchWindowProvider m_Provider;
         private GenerativeGraph m_ActiveGraph;
-        private JsonSerializerSettings m_SerializationSettings;
 
         [MenuItem("Proc Gen/Graph Editor")]
         private static void ShowMenu()
@@ -57,14 +56,6 @@ namespace ProcGenEditor
 
             VisualElement toolbar = rootVisualElement.Q<VisualElement>("editor-toolbar");
             toolbar.Q<Button>("button-save").clicked += SaveGenerativeGraph;
-
-            // serial
-            m_SerializationSettings = new JsonSerializerSettings()
-            {
-                ContractResolver = new ProcGenContractResolver()
-            };
-
-            m_SerializationSettings.Converters.Add(new VectorConverter());
         }
 
         private void LoadGenerativeGraph(GenerativeGraph graph)
@@ -87,7 +78,7 @@ namespace ProcGenEditor
                 ProcGenGraphNodeView nodeView = nodeViews[i];
                 for(int j = 0; j < nodeView.Node.Inputs.Length; ++j)
                 {
-                    ref NodeConnector input = ref nodeView.Node.Inputs[i];
+                    ref NodeConnector input = ref nodeView.Node.Inputs[j];
                     if ( input.IsConnectorValid())
                     {
                         int outputIndex = System.Array.IndexOf(GraphInstance.Nodes, input.Source);
@@ -108,7 +99,7 @@ namespace ProcGenEditor
 
         private void SaveGenerativeGraph()
         {
-            m_ActiveGraph.SerializeGraph(GraphInstance, m_SerializationSettings);
+            m_ActiveGraph.SerializeGraph(GraphInstance, ProcGenSerialization.SerializationSettings);
             EditorUtility.SetDirty(m_ActiveGraph);
         }
 

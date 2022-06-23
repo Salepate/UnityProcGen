@@ -12,20 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
   m_Name: testgraph
   m_EditorClassIdentifier: 
-  SerializedGraph: '{"Nodes":[{},{}]}'
+  SerializedGraph: '{"Nodes":[{"Inputs":[{"ConnectorType":0,"Initial":2},{"ConnectorType":0,"Initial":0},{"ConnectorType":0,"Initial":0}]}]}'
   NodeTypes:
-  - Dirt.ProcGen.CreateVector2Node
   - Dirt.ProcGen.Nodes.UnityPerlinNode
-  Connections:
-  - InputNode: 1
-    OutputNode: 0
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 1
-    OutputNode: 0
-    InputSlot: 1
-    OutputSlot: 0
-  - InputNode: 1
-    OutputNode: 0
-    InputSlot: 2
-    OutputSlot: 0
+  Connections: []

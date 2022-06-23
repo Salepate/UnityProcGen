@@ -5,19 +5,22 @@ using UnityEngine;
 
 namespace Dirt.ProcGen
 {
+    [System.Serializable]
     public struct NodeConnector
     {
         public readonly ConnectorType ConnectorType;
         public BaseNode Source { get; private set; }
         public int SourceOutputIndex { get; private set; }
+        public ConnectorValue Initial;
 
         private NodeOutput m_SourceOutput => Source.Outputs[SourceOutputIndex];
 
-        public NodeConnector(ConnectorType cType)
+        public NodeConnector(ConnectorType cType) : this()
         {
             ConnectorType = cType;
             Source = null;
             SourceOutputIndex = -1;
+            Initial = new ConnectorValue();
         }
 
         public void Connect(BaseNode sourceNode, int outputIndex)
@@ -50,7 +53,7 @@ namespace Dirt.ProcGen
             {
                 return ConnectorHelper.ConvertInt(m_SourceOutput);
             }
-            return 0;
+            return Initial.InitialValueInt;
         }
 
         public float ReadFloat()
@@ -59,7 +62,7 @@ namespace Dirt.ProcGen
             {
                 return ConnectorHelper.ConvertFloat(m_SourceOutput);
             }
-            return 0f;
+            return Initial.InitialValueFloat;
         }
         public Vector2 ReadVector2()
         {
@@ -67,7 +70,7 @@ namespace Dirt.ProcGen
             {
                 return m_SourceOutput.ValueVector2;
             }
-            return Vector2.zero;
+            return Initial.InitialValueVector2;
         }
         public Vector3 ReadVector3()
         {
@@ -75,7 +78,7 @@ namespace Dirt.ProcGen
             {
                 return m_SourceOutput.ValueVector3;
             }
-            return Vector3.zero;
+            return Initial.InitialValueVector3;
         }
     }
 
@@ -131,6 +134,18 @@ namespace Dirt.ProcGen
                 return true;
 
             return false;
+        }
+
+        public static Type GetAssociatedType(ConnectorType connectorType)
+        {
+            switch (connectorType)
+            {
+                case ConnectorType.Integer: return typeof(int);
+                case ConnectorType.Float: return typeof(float);
+                case ConnectorType.Vector2: return typeof(Vector2);
+                case ConnectorType.Vector3: return typeof(Vector3);
+            }
+            return null;
         }
 
         internal static int ConvertInt(NodeOutput sourceOutput)

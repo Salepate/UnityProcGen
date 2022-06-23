@@ -33,7 +33,7 @@ namespace ProcGenEditor
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange changes)
         {
-            for(int i = 0; changes.edgesToCreate != null && i < changes.edgesToCreate.Count; ++i)
+            for (int i = 0; changes.edgesToCreate != null && i < changes.edgesToCreate.Count; ++i)
             {
                 Edge edge = changes.edgesToCreate[i];
                 ProcGenGraphNodeView sourceNodeView = (ProcGenGraphNodeView)edge.output.node;
@@ -61,6 +61,12 @@ namespace ProcGenEditor
                     if ( elem is ProcGenGraphNodeView nodeView)
                     {
                         ArrayUtility.Remove(ref GraphInstance.Nodes, nodeView.Node);
+                    }
+                    if ( elem is Edge edge )
+                    {
+                        ProcGenGraphNodeView inputNode = (ProcGenGraphNodeView) edge.input.node;
+                        inputNode.TryGetPortData(edge.input, out int edgeSlot, out _);
+                        inputNode.Node.Inputs[edgeSlot].Connect(null, 0);
                     }
                 }
             }

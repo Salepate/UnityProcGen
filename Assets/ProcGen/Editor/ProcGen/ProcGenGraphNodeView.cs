@@ -50,14 +50,17 @@ namespace ProcGenEditor
 
             for(int i = 0; Node.Inputs != null && i < Node.Inputs.Length; ++i)
             {
-                var port = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(object));
+                System.Type portType = ConnectorHelper.GetAssociatedType(Node.Inputs[i].ConnectorType);
+                var port = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, portType);
+                //port.contentContainer.Add(new SliderInt());
                 inputContainer.Add(port);
                 m_PortMap.Add(port, new PortTuple(false, i));
                 m_InversePortMap.Add(new PortTuple(false, i), port);
             }
             for(int i = 0; i < Node.Outputs.Length; ++i)
             {
-                var port = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(object));
+                System.Type portType = ConnectorHelper.GetAssociatedType(Node.Outputs[i].ConnectorType);
+                var port = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, portType);
                 outputContainer.Add(port);
                 m_PortMap.Add(port, new PortTuple(true, i));
                 m_InversePortMap.Add(new PortTuple(true, i), port);
