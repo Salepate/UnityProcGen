@@ -9,6 +9,8 @@ namespace ProcGenEditor.ProcGen
     {
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
+
             if ( GUILayout.Button("Open Editor") )
             {
                 OpenGraphEditor();

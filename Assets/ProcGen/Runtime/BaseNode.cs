@@ -1,6 +1,10 @@
 namespace Dirt.ProcGen
 {
+#if UNITY_EDITOR
+    public abstract class BaseNode : UnityEngine.ScriptableObject // only used for inspecting fields
+#else
     public abstract class BaseNode
+#endif
     {
         /// <summary>
         /// Overrides to set node inputs

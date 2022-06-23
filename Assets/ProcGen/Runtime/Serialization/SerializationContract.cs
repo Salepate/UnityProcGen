@@ -55,7 +55,13 @@ namespace ProcGen.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             Type objType = Type.GetType(m_TypeArray[m_Index++], true);
+#if UNITY_EDITOR
+            ScriptableObject so = ScriptableObject.CreateInstance(objType);
+            serializer.Populate(reader, so);
+            return so;
+#else
             return serializer.Deserialize(reader, objType);
+#endif
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

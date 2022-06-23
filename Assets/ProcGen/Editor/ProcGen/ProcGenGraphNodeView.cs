@@ -1,5 +1,6 @@
 using Dirt.ProcGen;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -65,7 +66,13 @@ namespace ProcGenEditor
                 m_PortMap.Add(port, new PortTuple(true, i));
                 m_InversePortMap.Add(new PortTuple(true, i), port);
             }
-            
+
+            var customGUI = new IMGUIContainer();
+            customGUI.userData = Editor.CreateEditor(nodeData, typeof(BaseNodeInspector));
+            customGUI.contextType = ContextType.Editor;
+            customGUI.onGUIHandler = () => ((Editor)customGUI.userData).OnInspectorGUI();
+            extensionContainer.Add(customGUI);
+            RefreshExpandedState();
         }
 
         internal void SetOrigin(Vector2 newOrigin)
