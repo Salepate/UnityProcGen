@@ -5,6 +5,17 @@
     {
         public BaseNode[] Nodes = new BaseNode[0];
 
+        public T Query<T>(int num = 0) where T : BaseNode
+        {
+            int count = 0;
+            for(int i = 0; i < Nodes.Length; ++i)
+            {
+                if (Nodes[i].GetType() == typeof(T) && count++ == num)
+                    return (T) Nodes[i];
+            }
+            return null;
+        }
+
         public void Initialize()
         {
             for(int i = 0; i < Nodes.Length; ++i)
@@ -16,10 +27,10 @@
         public void EvaluateNode(int nodeIndex, bool recursive = true)
         {
             BaseNode targetNode = Nodes[nodeIndex];
-            InternalEvaluate(targetNode, recursive);
+            EvaluateNode(targetNode, recursive);
         }
 
-        private void InternalEvaluate(BaseNode targetNode, bool recursive)
+        public void EvaluateNode(BaseNode targetNode, bool recursive)
         {
             if (recursive && targetNode.Inputs != null && targetNode.Inputs.Length > 0)
             {
@@ -27,7 +38,7 @@
                 { 
                     if ( targetNode.Inputs[i].IsConnectorValid())
                     {
-                        InternalEvaluate(targetNode.Inputs[i].Source, recursive);
+                        EvaluateNode(targetNode.Inputs[i].Source, recursive);
                     }
                 }
             }
