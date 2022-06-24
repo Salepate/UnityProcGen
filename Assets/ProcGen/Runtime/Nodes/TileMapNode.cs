@@ -3,6 +3,7 @@ using UnityEngine;
 namespace Dirt.ProcGen
 {
     [System.Serializable]
+    [ProceduralNode(0, "X","Y")]
     public class TileMapNode : BaseNode
     {
         public Vector2Int m_Coordinate;

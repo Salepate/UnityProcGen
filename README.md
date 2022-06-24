@@ -2,7 +2,7 @@
 
 Procedural Generative Graph Editor
 
-| ![hosted by ImgBB](https://i.ibb.co/cFP24KB/Unity-y0-Op34-GHvj.png) | 
+| ![hosted by ImgBB](https://i.ibb.co/PrKhzKm/Unity-qu-R2-BCr-MO4.png) | 
 |:--:| 
 | *Unity ProcGen Graph Editor (image hosted by ImgBB)*  |
 

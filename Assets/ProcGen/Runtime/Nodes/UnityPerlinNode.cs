@@ -3,13 +3,14 @@ using UnityEngine;
 namespace Dirt.ProcGen.Nodes
 {
     [System.Serializable]
+    [ProceduralNode(3, "Coordinates", "Scale", "Offset", "Noise")]
     public class UnityPerlinNode : BaseNode
     {
-        //
-        private const int Scale = 0;
-        private const int Coordinate = 1;
+        // inputs
+        private const int Coordinate = 0;
+        private const int Scale = 1;
         private const int Offset = 2;
-        // Out
+        // output
         private const int OutputValue = 0;
 
         public override void Initialize()

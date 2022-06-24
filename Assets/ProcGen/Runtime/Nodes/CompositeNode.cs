@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Dirt.ProcGen
 {
+    [ProceduralNode(2, "X","Y","Vector")]
     public class CreateVector2Node : BaseNode
     {
         public const int X = 0;

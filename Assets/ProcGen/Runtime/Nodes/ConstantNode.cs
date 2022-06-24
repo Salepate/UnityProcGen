@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Dirt.ProcGen
 {
+    [ProceduralNode(0, "Integer")]
     public class IntNode : BaseNode
     {
         public int Value;
@@ -16,6 +17,7 @@ namespace Dirt.ProcGen
         }
     }
 
+    [ProceduralNode(0, "Float")]
     public class FloatNode : BaseNode
     {
         public float Value;
@@ -30,6 +32,7 @@ namespace Dirt.ProcGen
         }
     }
 
+    [ProceduralNode(0, "Vector")]
     public class Vector2Node : BaseNode
     {
         public Vector2 Value;
@@ -44,7 +47,7 @@ namespace Dirt.ProcGen
         }
     }
 
-
+    [ProceduralNode(0, "Vector")]
     public class Vector3Node : BaseNode
     {
         public Vector3 Value;
