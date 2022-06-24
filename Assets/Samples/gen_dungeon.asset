@@ -25,11 +25,11 @@ MonoBehaviour:
     InputSlot: 0
     OutputSlot: 0
   - InputNode: 1
-    OutputNode: 4
+    OutputNode: 2
     InputSlot: 0
     OutputSlot: 0
   - InputNode: 1
-    OutputNode: 2
+    OutputNode: 4
     InputSlot: 1
     OutputSlot: 0
   - InputNode: 2
@@ -55,23 +55,23 @@ MonoBehaviour:
       serializedVersion: 2
       x: 220
       y: 37
-      width: 148
+      width: 169
       height: 136
   - Position:
       serializedVersion: 2
-      x: 20
-      y: 113
-      width: 159
+      x: 26
+      y: 37
+      width: 135
       height: 112
   - Position:
       serializedVersion: 2
-      x: -237
-      y: 220
+      x: -253
+      y: 37
       width: 223
       height: 150
   - Position:
       serializedVersion: 2
-      x: -44
-      y: -26
+      x: -62
+      y: 224
       width: 223
       height: 126
