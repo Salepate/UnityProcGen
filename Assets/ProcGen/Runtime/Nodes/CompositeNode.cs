@@ -14,7 +14,6 @@ namespace Dirt.ProcGen
         }
         public override void Evaluate()
         {
-            Vector2 saucisse = new Vector2(Inputs[X].ReadFloat(), Inputs[Y].ReadFloat());
             Outputs[0].ValueVector2 = new Vector2(Inputs[X].ReadFloat(), Inputs[Y].ReadFloat());
         }
     }
