@@ -56,6 +56,7 @@ namespace ProcGenEditor
             graphView.AddManipulator(new ContentDragger());
             graphView.AddManipulator(new SelectionDragger());
             graphView.AddManipulator(new ClickSelector());
+            graphView.SetupZoom(0.5f, ContentZoomer.DefaultMaxScale);
             rootVisualElement.Q("graphRoot").RegisterCallback<KeyDownEvent>(OnKey);
 
             m_Provider.Graph = graphView;
