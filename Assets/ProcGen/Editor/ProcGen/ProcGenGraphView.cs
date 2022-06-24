@@ -25,8 +25,11 @@ namespace ProcGenEditor
 
             ports.ForEach(p =>
             {
-                if ( p.orientation == startPort.orientation && p.direction != startPort.direction)
+                if ( p.orientation == startPort.orientation 
+                    && p.direction != startPort.direction
+                    && ConnectorHelper.CanConvert((ConnectorType)startPort.userData, (ConnectorType)p.userData))
                 {
+
                     listPort.Add(p);
                 }
             });

@@ -70,7 +70,7 @@ namespace ProcGenEditor
                 System.Type portType = ConnectorHelper.GetAssociatedType(Node.Inputs[i].ConnectorType);
                 var port = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, portType);
                 port.portName = connectorName;
-                //port.contentContainer.Add(new SliderInt());
+                port.userData = Node.Inputs[i].ConnectorType;
                 inputContainer.Add(port);
                 m_PortMap.Add(port, new PortTuple(false, i));
                 m_InversePortMap.Add(new PortTuple(false, i), port);
@@ -82,6 +82,7 @@ namespace ProcGenEditor
                 System.Type portType = ConnectorHelper.GetAssociatedType(Node.Outputs[i].ConnectorType);
                 var port = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, portType);
                 port.portName = outputName;
+                port.userData = Node.Outputs[i].ConnectorType;
                 outputContainer.Add(port);
                 m_PortMap.Add(port, new PortTuple(true, i));
                 m_InversePortMap.Add(new PortTuple(true, i), port);
