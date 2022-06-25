@@ -16,7 +16,7 @@ namespace ProcGenEditor
         private SearchWindowProvider m_Provider;
         private GenerativeGraph m_ActiveGraph;
 
-        [MenuItem("Proc Gen/Graph Editor")]
+        [MenuItem("Window/General/Generative Graph Editor")]
         private static void ShowMenu()
         {
             ProcGenGraphEditor win = GetWindow<ProcGenGraphEditor>("Generative Graph");
