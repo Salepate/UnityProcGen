@@ -15,10 +15,10 @@ MonoBehaviour:
   SerializedGraph: '{"Nodes":[{"Threshold":0.5},{},{},{"m_Coordinate":{}},{"Value":[0.2,0.2]}]}'
   NodeTypes:
   - ProcGenSamples.DungeonTileNode
-  - Dirt.ProcGen.Nodes.UnityPerlinNode
-  - Dirt.ProcGen.CreateVector2Node
-  - Dirt.ProcGen.TileMapNode
-  - Dirt.ProcGen.Vector2Node
+  - ProcGen.Nodes.UnityPerlinNode
+  - ProcGen.CreateVector2Node
+  - ProcGen.TileMapNode
+  - ProcGen.Vector2Node
   Connections:
   - InputNode: 0
     OutputNode: 1

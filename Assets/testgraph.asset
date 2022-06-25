@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SerializedGraph: '{"Nodes":[{},{"Value":0.0},{"Value":0.0}]}'
   NodeTypes:
-  - Dirt.ProcGen.CreateVector2Node
-  - Dirt.ProcGen.FloatNode
-  - Dirt.ProcGen.FloatNode
+  - ProcGen.CreateVector2Node
+  - ProcGen.FloatNode
+  - ProcGen.FloatNode
   Connections:
   - InputNode: 0
     OutputNode: 1
