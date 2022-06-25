@@ -19,17 +19,15 @@ namespace ProcGenEditor
         [MenuItem("Proc Gen/Graph Editor")]
         private static void ShowMenu()
         {
-            ProcGenGraphEditor win = GetWindow<ProcGenGraphEditor>();
+            ProcGenGraphEditor win = GetWindow<ProcGenGraphEditor>("Generative Graph");
             win.position = new Rect(win.position.position, new Vector2(800f, 600f));
             win.Show(true);
-
-            win.LoadGenerativeGraph(ScriptableObject.CreateInstance<GenerativeGraph>());
         }
 
         public static void QuickLoadGraph(GenerativeGraph graph)
         {
             ShowMenu();
-            EditorWindow.GetWindow<ProcGenGraphEditor>().LoadGenerativeGraph(graph);
+            GetWindow<ProcGenGraphEditor>().LoadGenerativeGraph(graph);
         }
 
         private void OnEnable()
@@ -42,6 +40,8 @@ namespace ProcGenEditor
             m_Provider.Editor = this;
             VisualElement toolbar = rootVisualElement.Q<VisualElement>("editor-toolbar");
             toolbar.Q<Button>("button-save").clicked += SaveGenerativeGraph;
+            toolbar.Q<Button>("button-open").clicked += OpenGenerativeGraph;
+            LoadGenerativeGraph(ScriptableObject.CreateInstance<GenerativeGraph>());
         }
 
         public void ResetGraph()
@@ -66,6 +66,7 @@ namespace ProcGenEditor
         {
             ResetGraph();
             m_ActiveGraph = graph;
+
             GraphInstance = m_ActiveGraph.Deserialize(ProcGenSerialization.SerializationSettings, ProcGenSerialization.NodeConverter);
             m_Provider.Graph.GraphInstance = GraphInstance;
 
@@ -108,6 +109,22 @@ namespace ProcGenEditor
             m_ActiveGraph.SerializeGraph(GraphInstance, ProcGenSerialization.SerializationSettings);
             m_ActiveGraph.Meta = m_Provider.Graph.SerializeNodeMeta(GraphInstance);
             EditorUtility.SetDirty(m_ActiveGraph);
+        }
+
+        private void OpenGenerativeGraph()
+        {
+            string filePath = EditorUtility.OpenFilePanel("Graph", Application.dataPath, "asset");
+            if (filePath.StartsWith(Application.dataPath))
+                filePath = filePath.Substring(Application.dataPath.Length - "Assets".Length);
+
+            if ( !string.IsNullOrEmpty(filePath))
+            {
+                GenerativeGraph graphAsset = AssetDatabase.LoadAssetAtPath<GenerativeGraph>(filePath);
+                if ( graphAsset != null)
+                {
+                    QuickLoadGraph(graphAsset);
+                }
+            }
         }
 
         private void OnKey(KeyDownEvent keyEvent)
