@@ -8,9 +8,7 @@ namespace ProcGenSamples
 {
     public class DungeonTileSpawner : MonoBehaviour
     {
-        // Start is called before the first frame update
-        public GenerativeGraph Graph;
-        private RuntimeGraph m_GraphInstance;
+        public GenerativeGraphInstance Graph;
         private TileMapNode m_Tilemap;
         private DungeonTileNode m_DungeonTile;
 
@@ -22,17 +20,17 @@ namespace ProcGenSamples
 
         void Start()
         {
-            m_GraphInstance = Graph.Deserialize(ProcGenSerialization.SerializationSettings, ProcGenSerialization.NodeConverter);
-            m_Tilemap = m_GraphInstance.Query<TileMapNode>();
-            m_DungeonTile = m_GraphInstance.Query<DungeonTileNode>();
+            Graph.GenerateRuntime();
+            m_Tilemap = Graph.Runtime.Query<TileMapNode>();
+            m_DungeonTile = Graph.Runtime.Query<DungeonTileNode>();
             m_Tiles = new List<GameObject>();
             UpdateGrid(0, 0);
+            Graph.OnGraphUpdate += OnGraphChange;
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnGraphChange()
         {
-        
+            UpdateGrid(m_X, m_Y); // refresh
         }
 
         private void OnGUI()
@@ -69,13 +67,12 @@ namespace ProcGenSamples
 
             m_Tiles.Clear();
 
-
             for (int i = 0; i < TileSize; ++i)
             {
                 for(int j = 0; j < TileSize; ++j)
                 {
                     m_Tilemap.m_Coordinate = new Vector2Int(x * TileSize + i, y * TileSize + j);
-                    m_GraphInstance.EvaluateNode(m_DungeonTile);
+                    Graph.Runtime.EvaluateNode(m_DungeonTile);
                     if ( m_DungeonTile.IsTile )
                     {
                         var prim = GameObject.CreatePrimitive(PrimitiveType.Quad);

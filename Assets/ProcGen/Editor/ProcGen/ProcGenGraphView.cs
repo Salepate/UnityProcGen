@@ -11,13 +11,14 @@ namespace ProcGenEditor
 
     public class ProcGenGraphView : GraphView
     {
-        public RuntimeGraph GraphInstance { get; set; }
+        public GenerativeGraphInstance GraphInstance { get; set; }
         public ProcGenGraphView()
         {
             GridBackground gridBg = new GridBackground();
             Insert(0, gridBg);
             graphViewChanged += OnGraphViewChanged;
         }
+
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
@@ -39,6 +40,7 @@ namespace ProcGenEditor
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange changes)
         {
+            bool refreshGraph = false;
             for (int i = 0; changes.edgesToCreate != null && i < changes.edgesToCreate.Count; ++i)
             {
                 Edge edge = changes.edgesToCreate[i];
@@ -56,6 +58,7 @@ namespace ProcGenEditor
                 else
                 {
                     nodeView.Node.Inputs[slotIndex].Connect(sourceNode, sourceSlot);
+                    refreshGraph = true;
                 }
             }
 
@@ -66,15 +69,23 @@ namespace ProcGenEditor
                     var elem = changes.elementsToRemove[i];
                     if ( elem is ProcGenGraphNodeView nodeView)
                     {
-                        ArrayUtility.Remove(ref GraphInstance.Nodes, nodeView.Node);
+                        ArrayUtility.Remove(ref GraphInstance.Runtime.Nodes, nodeView.Node);
+                        refreshGraph = true;
                     }
                     if ( elem is Edge edge )
                     {
                         ProcGenGraphNodeView inputNode = (ProcGenGraphNodeView) edge.input.node;
                         inputNode.TryGetPortData(edge.input, out int edgeSlot, out _);
                         inputNode.Node.Inputs[edgeSlot].Connect(null, 0);
+                        refreshGraph = true;
                     }
                 }
+            }
+
+            if ( refreshGraph )
+            {
+                // TODO: use a queue that is polled by the game update
+                GraphInstance.OnGraphUpdate?.Invoke();
             }
             return changes;
         }
