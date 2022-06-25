@@ -58,7 +58,7 @@ namespace ProcGen
 
         public void Evaluate()
         {
-            Graph.EvaluateNode(0, true); // Evaluate Perlin
+            Graph.EvaluateNode(0); // Evaluate Perlin
             UnityPerlinNode perlin = (UnityPerlinNode) Graph.Nodes[0];
             Debug.Log($"Perlin: {perlin.Outputs[0].ValueFloat}");
         }

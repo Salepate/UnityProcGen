@@ -75,7 +75,7 @@ namespace ProcGenSamples
                 for(int j = 0; j < TileSize; ++j)
                 {
                     m_Tilemap.m_Coordinate = new Vector2Int(x * TileSize + i, y * TileSize + j);
-                    m_GraphInstance.EvaluateNode(m_DungeonTile, true);
+                    m_GraphInstance.EvaluateNode(m_DungeonTile);
                     if ( m_DungeonTile.IsTile )
                     {
                         var prim = GameObject.CreatePrimitive(PrimitiveType.Quad);
