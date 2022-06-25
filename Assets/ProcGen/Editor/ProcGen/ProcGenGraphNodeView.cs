@@ -1,4 +1,4 @@
-using Dirt.ProcGen;
+using ProcGen;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;

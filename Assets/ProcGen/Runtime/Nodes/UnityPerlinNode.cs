@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Dirt.ProcGen.Nodes
+namespace ProcGen.Nodes
 {
     [System.Serializable]
     [ProceduralNode(3, "Coordinates", "Scale", "Offset", "Noise")]

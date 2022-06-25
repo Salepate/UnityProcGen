@@ -3,7 +3,7 @@ using ProcGen.Serialization;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Dirt.ProcGen
+namespace ProcGen
 {
     [CreateAssetMenu(fileName = "gen_graph.asset", menuName ="Dirt/Generative Graph")]
     public class GenerativeGraph : ScriptableObject

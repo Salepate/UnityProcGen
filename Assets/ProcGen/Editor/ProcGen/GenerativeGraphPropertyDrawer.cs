@@ -1,4 +1,4 @@
-using Dirt.ProcGen;
+using ProcGen;
 using UnityEditor;
 using UnityEngine;
 

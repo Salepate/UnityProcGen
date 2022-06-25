@@ -1,4 +1,4 @@
-using Dirt.ProcGen;
+using ProcGen;
 using ProcGen.Serialization;
 using System.Collections;
 using System.Collections.Generic;

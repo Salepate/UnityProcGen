@@ -1,14 +1,14 @@
-using Dirt.ProcGen;
-using System;
+using ProcGen;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static Dirt.ProcGen.GenerativeGraph;
 
 namespace ProcGenEditor
 {
+    using NodeMetadata = ProcGen.GenerativeGraph.NodeMetadata;
+
     public class ProcGenGraphView : GraphView
     {
         public RuntimeGraph GraphInstance { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace Dirt.ProcGen
+﻿namespace ProcGen
 {
     public class ProceduralNodeAttribute : System.Attribute
     {

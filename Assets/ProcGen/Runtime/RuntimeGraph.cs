@@ -1,4 +1,4 @@
-﻿namespace Dirt.ProcGen
+﻿namespace ProcGen
 {
     [System.Serializable]
     public class RuntimeGraph

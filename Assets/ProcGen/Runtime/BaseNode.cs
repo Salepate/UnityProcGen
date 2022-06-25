@@ -1,4 +1,4 @@
-namespace Dirt.ProcGen
+namespace ProcGen
 {
 #if UNITY_EDITOR
     public abstract class BaseNode : UnityEngine.ScriptableObject // only used for inspecting fields

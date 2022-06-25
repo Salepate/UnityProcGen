@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Dirt.ProcGen
+namespace ProcGen
 {
     [ProceduralNode(0, "Integer")]
     public class IntNode : BaseNode

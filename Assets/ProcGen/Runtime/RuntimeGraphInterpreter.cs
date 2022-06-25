@@ -1,8 +1,8 @@
-using Dirt.ProcGen.Nodes;
+using ProcGen.Nodes;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Dirt.ProcGen
+namespace ProcGen
 {
     public class RuntimeGraphInterpreter : MonoBehaviour
     {

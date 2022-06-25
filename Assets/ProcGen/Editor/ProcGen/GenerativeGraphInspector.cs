@@ -1,11 +1,11 @@
-using Dirt.ProcGen;
+using ProcGen;
 using UnityEditor;
 using UnityEngine;
 
-namespace ProcGenEditor.ProcGen
+namespace ProcGenEditor
 {
     [CustomEditor(typeof(GenerativeGraph))]
-    public class GenGraphInspector : Editor
+    public class GenerativeGraphInspector : Editor
     {
         public override void OnInspectorGUI()
         {

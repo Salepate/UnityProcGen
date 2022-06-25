@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Dirt.ProcGen
+namespace ProcGen
 {
     [ProceduralNode(2, "X","Y","Vector")]
     public class CreateVector2Node : BaseNode

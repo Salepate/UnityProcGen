@@ -1,4 +1,4 @@
-using Dirt.ProcGen;
+using ProcGen;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;

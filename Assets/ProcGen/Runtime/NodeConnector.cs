@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace Dirt.ProcGen
+namespace ProcGen
 {
     [System.Serializable]
     public struct NodeConnector
