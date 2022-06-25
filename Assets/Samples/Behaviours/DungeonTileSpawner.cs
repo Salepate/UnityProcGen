@@ -80,7 +80,7 @@ namespace ProcGenSamples
                     {
                         var prim = GameObject.CreatePrimitive(PrimitiveType.Quad);
                         prim.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-                        prim.transform.position = new Vector3((x * TileSize + i), 0f, (y * TileSize + j));
+                        prim.transform.position = new Vector3(i - (TileSize) / 2f, 0f, j - (TileSize)/2f);
                         m_Tiles.Add(prim);
                     }
                 }
