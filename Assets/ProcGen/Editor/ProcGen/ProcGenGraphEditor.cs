@@ -1,5 +1,6 @@
 using Dirt.Utility;
 using ProcGen;
+using ProcGen.Debug;
 using ProcGen.Serialization;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,14 @@ namespace ProcGenEditor
     {
         public GenerativeGraphInstance GraphInstance { get; private set; }
         private SearchWindowProvider m_Provider;
+        private GraphDebuggerBehaviour m_GraphDebugger;
 
 
         [MenuItem("Window/General/Generative Graph Editor")]
-        private static void ShowMenu()
+        private static void OpenEditor()
         {
-            ProcGenGraphEditor win = GetWindow<ProcGenGraphEditor>("Generative Graph");
-            win.position = new Rect(win.position.position, new Vector2(800f, 600f));
-            win.Show(true);
+            ShowMenu();
+            GetWindow<ProcGenGraphEditor>().LoadGenerativeGraph(new GenerativeGraphInstance() { Graph = ScriptableObject.CreateInstance<GenerativeGraph>() });
         }
 
         public static void QuickLoadGraph(GenerativeGraph graph)
@@ -32,8 +33,30 @@ namespace ProcGenEditor
 
         public static void DebugRuntime(GenerativeGraphInstance graphInstance)
         {
+            var editor = GetWindow<ProcGenGraphEditor>();
             ShowMenu();
-            GetWindow<ProcGenGraphEditor>().LoadGenerativeGraph(graphInstance);
+            editor.LoadGenerativeGraph(graphInstance);
+            GraphDebuggerBehaviour dbg = GameObject.FindObjectOfType<GraphDebuggerBehaviour>();
+            if ( dbg == null )
+            {
+                GameObject dbgObj = new GameObject("GraphDebugger");
+                dbgObj.hideFlags = HideFlags.DontSave | HideFlags.DontSaveInEditor;
+                dbg = dbgObj.AddComponent<GraphDebuggerBehaviour>();
+            }
+            editor.AttachDebugger(dbg);
+        }
+
+        public void AttachDebugger(GraphDebuggerBehaviour dbg)
+        {
+            m_GraphDebugger = dbg;
+            dbg.SetInstance(GraphInstance);
+        }
+
+        private static void ShowMenu()
+        {
+            ProcGenGraphEditor win = GetWindow<ProcGenGraphEditor>("Generative Graph");
+            win.position = new Rect(win.position.position, new Vector2(800f, 600f));
+            win.Show(true);
         }
 
         private void OnEnable()
@@ -47,7 +70,6 @@ namespace ProcGenEditor
             VisualElement toolbar = rootVisualElement.Q<VisualElement>("editor-toolbar");
             toolbar.Q<Button>("button-save").clicked += SaveGenerativeGraph;
             toolbar.Q<Button>("button-open").clicked += OpenGenerativeGraph;
-            LoadGenerativeGraph(new GenerativeGraphInstance() { Graph = ScriptableObject.CreateInstance<GenerativeGraph>() });
         }
 
         public void ResetGraph()
@@ -62,6 +84,8 @@ namespace ProcGenEditor
             graphView.AddManipulator(new ClickSelector());
             graphView.AddManipulator(new RectangleSelector());
             graphView.SetupZoom(0.5f, ContentZoomer.DefaultMaxScale);
+            graphView.NotifyGraphUpdate = NotifyGraphChange;
+            
             rootVisualElement.Q("graphRoot").RegisterCallback<KeyDownEvent>(OnKey);
 
             m_Provider.GraphView = graphView;
@@ -72,6 +96,7 @@ namespace ProcGenEditor
         {
             ResetGraph();
             GraphInstance = graphInstance;
+
             if ( GraphInstance.Runtime == null) 
                 GraphInstance.Runtime = graphInstance.Graph.Deserialize(ProcGenSerialization.SerializationSettings, ProcGenSerialization.NodeConverter);
 
@@ -83,7 +108,7 @@ namespace ProcGenEditor
             for(int i = 0; i < GraphInstance.Runtime.Nodes.Length; ++i)
             {
                 ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(GraphInstance.Runtime.Nodes[i]);
-                nodeView.DataUpdate += () => GraphInstance.OnGraphUpdate?.Invoke();
+                nodeView.DataUpdate = NotifyGraphChange;
                 nodeViews.Add(nodeView);
                 nodeView.SetPosition(graph.Meta[i].Position);
                 m_Provider.GraphView.AddElement(nodeView);
@@ -110,6 +135,14 @@ namespace ProcGenEditor
                         }
                     }
                 }
+            }
+        }
+
+        private void NotifyGraphChange()
+        {
+            if (m_GraphDebugger != null)
+            {
+                m_GraphDebugger.NotifyGraphChanged();
             }
         }
 
@@ -192,7 +225,7 @@ namespace ProcGenEditor
                 node.Initialize();
                 node.SetIndex(Editor.GraphInstance.Runtime.Nodes.Length);
                 ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(node);
-                nodeView.DataUpdate += () => GraphView.GraphInstance.OnGraphUpdate?.Invoke();
+                nodeView.DataUpdate = Editor.NotifyGraphChange;
                 var windowMousePosition = EditorRoot.ChangeCoordinatesTo(EditorRoot.parent, context.screenMousePosition - Editor.position.position);
                 var graphMousePosition = GraphView.contentViewContainer.WorldToLocal(windowMousePosition);
                 ArrayUtility.Add(ref Editor.GraphInstance.Runtime.Nodes, node);

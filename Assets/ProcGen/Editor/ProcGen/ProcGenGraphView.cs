@@ -11,6 +11,7 @@ namespace ProcGenEditor
 
     public class ProcGenGraphView : GraphView
     {
+        public System.Action NotifyGraphUpdate;
         public GenerativeGraphInstance GraphInstance { get; set; }
         public ProcGenGraphView()
         {
@@ -89,8 +90,7 @@ namespace ProcGenEditor
 
             if ( refreshGraph )
             {
-                // TODO: use a queue that is polled by the game update
-                GraphInstance.OnGraphUpdate?.Invoke();
+                NotifyGraphUpdate?.Invoke();
             }
             return changes;
         }
