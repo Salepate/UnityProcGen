@@ -33,8 +33,8 @@ namespace ProcGenEditor
 
         public static void DebugRuntime(GenerativeGraphInstance graphInstance)
         {
-            var editor = GetWindow<ProcGenGraphEditor>();
             ShowMenu();
+            var editor = GetWindow<ProcGenGraphEditor>();
             editor.LoadGenerativeGraph(graphInstance);
             GraphDebuggerBehaviour dbg = GameObject.FindObjectOfType<GraphDebuggerBehaviour>();
             if ( dbg == null )
