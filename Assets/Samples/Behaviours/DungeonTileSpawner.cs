@@ -21,19 +21,19 @@ namespace ProcGenSamples
         }
         private void Start()
         {
-            m_Tilemap = Graph.Runtime.Query<TileMapNode>();
-            m_DungeonTile = Graph.Runtime.Query<DungeonTileNode>();
-            UpdateGrid();
+            OnGraphChange();
             Graph.OnGraphUpdate += OnGraphChange; // only invoked in editor
         }
 
         private void AllocateTiles()
         {
+            GameObject rootObj = new GameObject("DungeonRoot");
             m_Tiles = new List<GameObject>();
             Quaternion baseRot = Quaternion.Euler(90f, 0f, 0f);
             for (int i = 0; i < TilesPerSide * TilesPerSide; ++i)
             {
                 GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                tile.transform.SetParent(rootObj.transform);
                 tile.transform.localRotation = baseRot;
                 m_Tiles.Add(tile);
             }
@@ -41,6 +41,8 @@ namespace ProcGenSamples
 
         private void OnGraphChange()
         {
+            m_Tilemap = Graph.Runtime.Query<TileMapNode>(); // just in case it was destroyed/recreated
+            m_DungeonTile = Graph.Runtime.Query<DungeonTileNode>();
             UpdateGrid();
         }
 
