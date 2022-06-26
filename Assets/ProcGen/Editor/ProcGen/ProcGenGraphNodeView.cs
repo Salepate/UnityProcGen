@@ -11,6 +11,7 @@ namespace ProcGenEditor
     using PortTuple = System.Tuple<bool, int>;
     public class ProcGenGraphNodeView : Node
     {
+        public System.Action DataUpdate;
         private static readonly string[] s_DefaultConnectorNames = new string[1] { "Input" };
         private static readonly string[] s_DefaultOutputNames = new string[1] { "Output" };
         public Vector2 Origin { get; private set; }
@@ -91,7 +92,15 @@ namespace ProcGenEditor
             var customGUI = new IMGUIContainer();
             customGUI.userData = Editor.CreateEditor(nodeData, typeof(BaseNodeInspector));
             customGUI.contextType = ContextType.Editor;
-            customGUI.onGUIHandler = () => ((Editor)customGUI.userData).OnInspectorGUI();
+            customGUI.onGUIHandler = () =>
+            {
+                EditorGUI.BeginChangeCheck();
+                ((Editor)customGUI.userData).OnInspectorGUI();
+                if ( EditorGUI.EndChangeCheck())
+                {
+                    DataUpdate?.Invoke();
+                }
+            };
             extensionContainer.Add(customGUI);
             RefreshExpandedState();
         }
