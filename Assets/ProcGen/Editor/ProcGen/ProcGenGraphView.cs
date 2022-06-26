@@ -69,7 +69,12 @@ namespace ProcGenEditor
                     var elem = changes.elementsToRemove[i];
                     if ( elem is ProcGenGraphNodeView nodeView)
                     {
+                        int idx = nodeView.Node.NodeIndex;
                         ArrayUtility.Remove(ref GraphInstance.Runtime.Nodes, nodeView.Node);
+                        // reupdate all node ids above
+                        for (int j = idx; j < GraphInstance.Runtime.Nodes.Length; ++j)
+                            GraphInstance.Runtime.Nodes[j].SetIndex(j);
+
                         refreshGraph = true;
                     }
                     if ( elem is Edge edge )

@@ -190,6 +190,7 @@ namespace ProcGenEditor
             {
                 BaseNode node = (BaseNode) CreateInstance((Type)searchEntry.userData);
                 node.Initialize();
+                node.SetIndex(Editor.GraphInstance.Runtime.Nodes.Length);
                 ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(node);
                 nodeView.DataUpdate += () => GraphView.GraphInstance.OnGraphUpdate?.Invoke();
                 var windowMousePosition = EditorRoot.ChangeCoordinatesTo(EditorRoot.parent, context.screenMousePosition - Editor.position.position);
