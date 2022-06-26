@@ -11,7 +11,7 @@ namespace ProcGen.Nodes.Composites
 
         public override void Initialize()
         {
-            Inputs = NodeConnector.CreateInputs(ConnectorType.Float, ConnectorType.Float);
+            Inputs = NodeConnector.CreateInputs(ConnectorType.Float, ConnectorType.Float, ConnectorType.Float);
             Outputs = NodeOutput.CreateOutputs(ConnectorType.Vector2);
         }
 
