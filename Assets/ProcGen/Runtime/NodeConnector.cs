@@ -8,6 +8,7 @@ namespace ProcGen
     [System.Serializable]
     public struct NodeConnector
     {
+
         public readonly ConnectorType ConnectorType;
         public BaseNode Source { get; private set; }
         public int SourceOutputIndex { get; private set; }
@@ -137,6 +138,9 @@ namespace ProcGen
             }
 
             if (c2 == ConnectorType.SourceType) // passthrough for math ops
+                return true;
+
+            if (c1 == ConnectorType.Vector2 && c2 == ConnectorType.Vector3)
                 return true;
 
             if (c1 == ConnectorType.Integer && c2 == ConnectorType.Float)
