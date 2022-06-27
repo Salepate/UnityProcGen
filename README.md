@@ -27,6 +27,10 @@ Procedural Generative Graph Editor
 |:--:| 
 | *Use perlin noise to decide walkable tile*  |
 
+| ![hosted by ImgBB](https://i.ibb.co/h2JkTx9/Unity-3-UDv1-Qujq-J.png) | 
+|:--:| 
+| *combine perlin to generate basic heightmap*  |
+
 
 ## Usage
 
