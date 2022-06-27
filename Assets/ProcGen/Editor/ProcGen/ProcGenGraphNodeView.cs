@@ -51,11 +51,7 @@ namespace ProcGenEditor
         {
             Node = nodeData;
 
-            string nodeName = nodeData.GetType().Name;
-            if (nodeName.EndsWith("Node"))
-                nodeName = nodeName.Substring(0, nodeName.Length - 4);
-            
-            this.Q<Label>("title-label").text = ObjectNames.NicifyVariableName(nodeName);
+            this.Q<Label>("title-label").text = ProcGenEditorHelper.FormatNodeName(nodeData.GetType().Name);
 
             // TODO: store in cache if performance is an issue
             string[] outputNames = s_DefaultOutputNames;

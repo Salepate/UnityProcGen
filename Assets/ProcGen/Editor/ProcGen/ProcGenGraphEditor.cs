@@ -210,7 +210,7 @@ namespace ProcGenEditor
                     if (nodeEntry.Value.IsAbstract)
                         continue;
 
-                    res.Add(new SearchTreeEntry(new GUIContent(nodeEntry.Value.Name))
+                    res.Add(new SearchTreeEntry(new GUIContent(ProcGenEditorHelper.FormatNodeName(nodeEntry.Value.Name)))
                     {
                         level = 1,
                         userData = nodeEntry.Value
