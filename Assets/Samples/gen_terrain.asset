@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
+  m_Name: gen_terrain
+  m_EditorClassIdentifier: 
+  SerializedGraph: '{"Nodes":[{"Threshold":0.5},{},{},{"m_Coordinate":{}},{"Value":[0.2,0.2]}]}'
+  NodeTypes:
+  - ProcGenSamples.DungeonTileNode
+  - ProcGen.Nodes.UnityPerlinNode
+  - ProcGen.Nodes.Composites.CreateVector2Node
+  - ProcGen.Nodes.TileMapNode
+  - ProcGen.Nodes.Constants.Vector2Node
+  Connections:
+  - InputNode: 0
+    OutputNode: 1
+    InputSlot: 0
+    OutputSlot: 0
+  - InputNode: 1
+    OutputNode: 2
+    InputSlot: 0
+    OutputSlot: 0
+  - InputNode: 1
+    OutputNode: 4
+    InputSlot: 1
+    OutputSlot: 0
+  - InputNode: 2
+    OutputNode: 3
+    InputSlot: 0
+    OutputSlot: 0
+  - InputNode: 2
+    OutputNode: 3
+    InputSlot: 1
+    OutputSlot: 1
+  Values:
+  - Node: 1
+    Slot: 2
+    Value: {x: 0, y: 0, z: 0, w: 0}
+  Meta:
+  - Position:
+      serializedVersion: 2
+      x: 397
+      y: 37
+      width: 223
+      height: 106
+  - Position:
+      serializedVersion: 2
+      x: 220
+      y: 37
+      width: 169
+      height: 136
+  - Position:
+      serializedVersion: 2
+      x: 26
+      y: 37
+      width: 135
+      height: 112
+  - Position:
+      serializedVersion: 2
+      x: -253
+      y: 37
+      width: 223
+      height: 150
+  - Position:
+      serializedVersion: 2
+      x: -62
+      y: 224
+      width: 223
+      height: 126
