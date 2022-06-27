@@ -16,9 +16,9 @@ MonoBehaviour:
   NodeTypes:
   - ProcGenSamples.DungeonTileNode
   - ProcGen.Nodes.UnityPerlinNode
-  - ProcGen.CreateVector2Node
-  - ProcGen.TileMapNode
-  - ProcGen.Vector2Node
+  - ProcGen.Nodes.Composites.CreateVector2Node
+  - ProcGen.Nodes.TileMapNode
+  - ProcGen.Nodes.Constants.Vector2Node
   Connections:
   - InputNode: 0
     OutputNode: 1

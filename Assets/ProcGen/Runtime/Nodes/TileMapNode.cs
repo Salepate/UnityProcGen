@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ProcGen
+namespace ProcGen.Nodes
 {
     [System.Serializable]
     [ProceduralNode(0, "X","Y")]

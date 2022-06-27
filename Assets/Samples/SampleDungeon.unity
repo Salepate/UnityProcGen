@@ -152,8 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12990cfc4d601743821f932629401b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Graph: {fileID: 11400000, guid: 8f9467b213c2f144ca6f39641fab7c44, type: 2}
-  TileSize: 50
+  Graph:
+    Graph: {fileID: 11400000, guid: 8f9467b213c2f144ca6f39641fab7c44, type: 2}
+  TilesPerSide: 100
 --- !u!4 &555602807
 Transform:
   m_ObjectHideFlags: 0
