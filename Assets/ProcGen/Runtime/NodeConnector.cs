@@ -8,6 +8,7 @@ namespace ProcGen
     [System.Serializable]
     public struct NodeConnector
     {
+
         public readonly ConnectorType ConnectorType;
         public BaseNode Source { get; private set; }
         public int SourceOutputIndex { get; private set; }
@@ -44,6 +45,17 @@ namespace ProcGen
         {
             bool sourceExists = Source != null && Source.Outputs != null && SourceOutputIndex < Source.Outputs.Length;
             return sourceExists && ConnectorHelper.CanConvert(m_SourceOutput.ConnectorType, ConnectorType);
+        }
+
+        public bool TryGetAttachedOutput(out NodeOutput output)
+        {
+            output = default;
+            if (IsConnectorValid())
+            {
+                output = Source.Outputs[SourceOutputIndex];
+                return true;
+            }
+            return false;
         }
 
 
@@ -94,7 +106,7 @@ namespace ProcGen
         [FieldOffset(4)]
         public Vector2 ValueVector2;
         [FieldOffset(4)]
-        public Vector2 ValueVector3;
+        public Vector3 ValueVector3;
 
         public NodeOutput(ConnectorType connectorType) : this()
         {
@@ -113,11 +125,6 @@ namespace ProcGen
 
     public static class ConnectorHelper
     {
-        public static bool NeedsConvert(ConnectorType c1, ConnectorType c2)
-        {
-            return c1 != c2;
-        }
-
         public static bool CanConvert(ConnectorType c1, ConnectorType c2)
         {
             if (c1 == c2)
@@ -129,6 +136,12 @@ namespace ProcGen
                 c1 = c2;
                 c2 = tmp;
             }
+
+            if (c2 == ConnectorType.SourceType) // passthrough for math ops
+                return true;
+
+            if (c1 == ConnectorType.Vector2 && c2 == ConnectorType.Vector3)
+                return true;
 
             if (c1 == ConnectorType.Integer && c2 == ConnectorType.Float)
                 return true;
@@ -145,7 +158,7 @@ namespace ProcGen
                 case ConnectorType.Vector2: return typeof(Vector2);
                 case ConnectorType.Vector3: return typeof(Vector3);
             }
-            return null;
+            return typeof(object);
         }
 
         internal static int ConvertInt(NodeOutput sourceOutput)
@@ -167,6 +180,7 @@ namespace ProcGen
         Integer,
         Float,
         Vector2,
-        Vector3
+        Vector3,
+        SourceType
     }
 }

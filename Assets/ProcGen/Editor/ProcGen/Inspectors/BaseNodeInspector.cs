@@ -11,15 +11,17 @@ namespace ProcGenEditor
         private static readonly string[] m_IgnoredProperties = new string[] { "m_Script" };
         public override void OnInspectorGUI()
         {
-            GUILayout.Space(Padding);
             GUILayout.BeginHorizontal();
+            GUILayout.Space(Padding);
+            GUILayout.BeginVertical();
             GUILayout.Space(Padding);
             serializedObject.Update();
             DrawPropertiesExcluding(serializedObject, m_IgnoredProperties);
             serializedObject.ApplyModifiedProperties();
             GUILayout.Space(Padding);
-            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
             GUILayout.Space(Padding);
+            GUILayout.EndHorizontal();
         }
     }
 }
