@@ -379,6 +379,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6ebc7674e527f541a3a1760bb92f73a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Scale: 100
+  GridSize: 100
   Graph:
     Graph: {fileID: 11400000, guid: b13838f596ec87b468908b0bd2daa981, type: 2}
 --- !u!4 &1208127381
