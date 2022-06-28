@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
   m_Name: gen_terrain
   m_EditorClassIdentifier: 
-  SerializedGraph: '{"Nodes":[{},{},{"m_Coordinate":{}},{"Value":[0.1,0.03]},{},{},{"Value":13.3},{},{"Value":0.8},{},{},{"Average":false},{},{"ManualTimeUpdate":true},{"Average":false},{},{"Value":10.0}]}'
+  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.1,0.03]},{},{},{"Value":13.3},{"ManualTimeUpdate":true},{"Average":false},{},{"Value":10.0}]}'
   NodeTypes:
   - ProcGen.Nodes.UnityPerlinNode
   - ProcGen.Nodes.Composites.CreateVector2Node
@@ -21,19 +21,13 @@ MonoBehaviour:
   - ProcGenSamples.HeightMapNode
   - ProcGen.Nodes.Maths.MultiplyNode
   - ProcGen.Nodes.Constants.FloatNode
-  - ProcGen.Nodes.UnityPerlinNode
-  - ProcGen.Nodes.Constants.FloatNode
-  - ProcGen.Nodes.Composites.CreateVector2Node
-  - ProcGen.Nodes.Maths.MultiplyNode
-  - ProcGen.Nodes.Maths.AddNode
-  - ProcGen.Nodes.Composites.CreateVector2Node
   - ProcGenSamples.TimeSampler
   - ProcGen.Nodes.Maths.AddNode
   - ProcGen.Nodes.Maths.MultiplyNode
   - ProcGen.Nodes.Constants.FloatNode
   Connections:
   - InputNode: 0
-    OutputNode: 14
+    OutputNode: 8
     InputSlot: 0
     OutputSlot: 0
   - InputNode: 0
@@ -49,7 +43,7 @@ MonoBehaviour:
     InputSlot: 1
     OutputSlot: 1
   - InputNode: 4
-    OutputNode: 11
+    OutputNode: 5
     InputSlot: 0
     OutputSlot: 0
   - InputNode: 5
@@ -60,66 +54,25 @@ MonoBehaviour:
     OutputNode: 6
     InputSlot: 1
     OutputSlot: 0
-  - InputNode: 7
-    OutputNode: 1
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 7
+  - InputNode: 8
     OutputNode: 9
-    InputSlot: 1
-    OutputSlot: 0
-  - InputNode: 9
-    OutputNode: 8
     InputSlot: 0
     OutputSlot: 0
-  - InputNode: 9
-    OutputNode: 8
+  - InputNode: 8
+    OutputNode: 1
     InputSlot: 1
     OutputSlot: 0
-  - InputNode: 10
+  - InputNode: 9
     OutputNode: 7
     InputSlot: 0
     OutputSlot: 0
-  - InputNode: 11
-    OutputNode: 5
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 11
+  - InputNode: 9
     OutputNode: 10
-    InputSlot: 1
-    OutputSlot: 0
-  - InputNode: 12
-    OutputNode: 13
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 14
-    OutputNode: 15
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 14
-    OutputNode: 1
-    InputSlot: 1
-    OutputSlot: 0
-  - InputNode: 15
-    OutputNode: 12
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 15
-    OutputNode: 16
     InputSlot: 1
     OutputSlot: 0
   Values:
   - Node: 0
     Slot: 2
-    Value: {x: 0, y: 0, z: 0, w: 0}
-  - Node: 7
-    Slot: 2
-    Value: {x: 0, y: 0, z: 0, w: 0}
-  - Node: 10
-    Slot: 1
-    Value: {x: 0, y: 0, z: 0, w: 0}
-  - Node: 12
-    Slot: 1
     Value: {x: 0, y: 0, z: 0, w: 0}
   Meta:
   - Position:
@@ -130,7 +83,7 @@ MonoBehaviour:
       height: 136
   - Position:
       serializedVersion: 2
-      x: 26
+      x: -142
       y: 37
       width: 135
       height: 112
@@ -138,89 +91,53 @@ MonoBehaviour:
       serializedVersion: 2
       x: -471
       y: 37
-      width: 223
-      height: 150
+      width: 96
+      height: 112
   - Position:
       serializedVersion: 2
-      x: -197
-      y: 218
+      x: -471
+      y: 149
       width: 223
       height: 126
   - Position:
       serializedVersion: 2
-      x: 1178
-      y: 459
+      x: 650
+      y: 118
       width: 112
       height: 88
   - Position:
       serializedVersion: 2
-      x: 532
+      x: 477
+      y: 118
+      width: 123
+      height: 112
+  - Position:
+      serializedVersion: 2
+      x: 202
       y: 294
-      width: 123
-      height: 112
-  - Position:
-      serializedVersion: 2
-      x: -62
-      y: 382
       width: 223
       height: 106
-  - Position:
-      serializedVersion: 2
-      x: 363
-      y: 590
-      width: 169
-      height: 136
-  - Position:
-      serializedVersion: 2
-      x: -318
-      y: 590
-      width: 223
-      height: 106
-  - Position:
-      serializedVersion: 2
-      x: 161
-      y: 702
-      width: 135
-      height: 112
-  - Position:
-      serializedVersion: 2
-      x: 549
-      y: 590
-      width: 123
-      height: 112
-  - Position:
-      serializedVersion: 2
-      x: 773
-      y: 435
-      width: 187
-      height: 130
-  - Position:
-      serializedVersion: 2
-      x: -248
-      y: -187
-      width: 135
-      height: 112
   - Position:
       serializedVersion: 2
       x: -517
-      y: -203
+      y: -331
       width: 187
       height: 154
   - Position:
       serializedVersion: 2
-      x: 246
-      y: -75
+      x: 48
+      y: -49
       width: 187
       height: 130
   - Position:
       serializedVersion: 2
-      x: -7
-      y: -203
+      x: -101
+      y: -147
       width: 123
       height: 112
   - Position:
       serializedVersion: 2
-      x: -248
-      y: -51
+      x: -458
+      y: -121
       width: 223
       height: 106
