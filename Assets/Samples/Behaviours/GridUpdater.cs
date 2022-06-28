@@ -14,6 +14,8 @@ public class GridUpdater : MonoBehaviour
     private Mesh m_Mesh;
     private Vector3[] m_Vertices;
     private int[] m_Indices;
+
+    private TimeSampler m_Time;
     private void Awake()
     {
         CreateGrid();
@@ -28,8 +30,18 @@ public class GridUpdater : MonoBehaviour
         OnGraphChange();
     }
 
+    private void Update()
+    {
+        if (m_Time != null)
+            m_Time.CacheTimeValue();
+
+        UpdateGrid();
+    }
+
     private void OnGraphChange()
     {
+        m_Time = Graph.Runtime.Query<TimeSampler>();
+        m_Time.ManualTimeUpdate = true;
         UpdateGrid();
     }
 
@@ -42,7 +54,7 @@ public class GridUpdater : MonoBehaviour
         {
             int y = i % GridSize;
             int x = i / GridSize;
-            tilemap.m_Coordinate = new Vector2Int(x, y);
+            tilemap.Coordinate = new Vector2Int(x, y);
             Graph.Runtime.EvaluateNode(heightmap);
             float height = heightmap.Height;
             ref Vector3 p = ref m_Vertices[i];
