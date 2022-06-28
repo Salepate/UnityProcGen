@@ -74,7 +74,7 @@ public class GridUpdater : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < (TileOffset*TileOffset); ++i)
+        for(int i = 0; i < (TileOffset*GridSize); ++i)
         {
             if (i % GridSize == TileOffset)
                 continue;
