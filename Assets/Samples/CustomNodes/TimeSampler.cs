@@ -1,4 +1,5 @@
 using ProcGen;
+using ProcGen.Connector;
 
 namespace ProcGenSamples
 {
@@ -17,7 +18,7 @@ namespace ProcGenSamples
         public override void Initialize()
         {
             m_Start = UnityEngine.Time.realtimeSinceStartup;
-            Outputs = NodeOutput.CreateOutputs(ConnectorType.Float, ConnectorType.Float, ConnectorType.Float);
+            Outputs = this.CreateOutputs(ConnectorType.Float, ConnectorType.Float, ConnectorType.Float);
         }
         public override void Evaluate()
         {

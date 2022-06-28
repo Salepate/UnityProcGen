@@ -1,3 +1,4 @@
+using ProcGen.Connector;
 using UnityEngine;
 
 namespace ProcGen.Nodes.Maths
@@ -12,16 +13,16 @@ namespace ProcGen.Nodes.Maths
         public const int NewMax  = 4;
         public override void Initialize()
         {
-            Inputs = NodeConnector.CreateInputs(ConnectorType.SourceType, ConnectorType.Float, ConnectorType.Float, ConnectorType.Float, ConnectorType.Float);
+            Inputs = this.CreateInputs(ConnectorType.SourceType, ConnectorType.Float, ConnectorType.Float, ConnectorType.Float, ConnectorType.Float);
             Inputs[PrevMin].Initial.InitialValueFloat = 0f;
             Inputs[PrevMax].Initial.InitialValueFloat = 1f;
             Inputs[NewMin].Initial.InitialValueFloat = 0f;
             Inputs[NewMax].Initial.InitialValueFloat = 1f;
-            Outputs = NodeOutput.CreateOutputs(ConnectorType.SourceType);
+            Outputs = this.CreateOutputs(ConnectorType.SourceType);
         }
         public override void Evaluate()
         {
-            ref NodeConnector inputValue = ref Inputs[Input];
+            ref NodeInput inputValue = ref Inputs[Input];
             ref NodeOutput outputValue = ref Outputs[0];
 
             if (inputValue.TryGetAttachedOutput(out NodeOutput source))
@@ -53,7 +54,7 @@ namespace ProcGen.Nodes.Maths
             }
         }
 
-        private ref NodeConnector Get(int index)
+        private ref NodeInput Get(int index)
         {
             return ref Inputs[index];
         }

@@ -1,4 +1,5 @@
 using ProcGen;
+using ProcGen.Connector;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -7,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace ProcGenEditor
 {
-    using NodeMetadata = ProcGen.GenerativeGraph.NodeMetadata;
+    using NodeMetadata = GenerativeGraph.NodeMetadata;
 
     public class ProcGenGraphView : GraphView
     {

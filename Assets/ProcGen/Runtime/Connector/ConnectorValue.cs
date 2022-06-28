@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace ProcGen
+namespace ProcGen.Connector
 {
     [StructLayout(LayoutKind.Explicit)]
     public struct ConnectorValue

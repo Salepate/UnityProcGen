@@ -1,3 +1,4 @@
+using ProcGen.Connector;
 using UnityEngine;
 
 namespace ProcGen.Nodes
@@ -10,7 +11,7 @@ namespace ProcGen.Nodes
 
         public override void Initialize()
         {
-            Outputs = NodeOutput.CreateOutputs(ConnectorType.Integer, ConnectorType.Integer);
+            Outputs = this.CreateOutputs(ConnectorType.Integer, ConnectorType.Integer);
         }
         public override void Evaluate()
         {

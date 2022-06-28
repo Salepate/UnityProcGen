@@ -1,5 +1,6 @@
 using Dirt.Utility;
 using ProcGen;
+using ProcGen.Connector;
 using ProcGen.Debug;
 using ProcGen.Serialization;
 using System;
@@ -119,7 +120,7 @@ namespace ProcGenEditor
                 ProcGenGraphNodeView nodeView = nodeViews[i];
                 for(int j = 0; j < nodeView.Node.Inputs.Length; ++j)
                 {
-                    ref NodeConnector input = ref nodeView.Node.Inputs[j];
+                    ref NodeInput input = ref nodeView.Node.Inputs[j];
                     if ( input.IsConnectorValid())
                     {
                         int outputIndex = System.Array.IndexOf(GraphInstance.Runtime.Nodes, input.Source);

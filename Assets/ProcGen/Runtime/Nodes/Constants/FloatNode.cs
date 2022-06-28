@@ -1,3 +1,5 @@
+using ProcGen.Connector;
+
 namespace ProcGen.Nodes.Constants
 {
     [ProceduralNode(0, "Float")]
@@ -7,7 +9,7 @@ namespace ProcGen.Nodes.Constants
 
         public override void Initialize()
         {
-            Outputs = NodeOutput.CreateOutputs(ConnectorType.Float);
+            Outputs = this.CreateOutputs(ConnectorType.Float);
         }
         public override void Evaluate()
         {

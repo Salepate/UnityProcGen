@@ -1,19 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using ProcGen.Connector;
+using System.Collections.Generic;
 
 namespace ProcGen
 {
-    [System.Serializable]
+    /// <summary>
+    /// Runtime instance of a GenerativeGraphInstance
+    /// </summary>
     public class RuntimeGraph
     {
         public BaseNode[] Nodes = new BaseNode[0];
 
         private List<int> m_EvaluationStack; 
 
-        public RuntimeGraph()
+        internal RuntimeGraph()
         {
             m_EvaluationStack = new List<int>();
         }
 
+        /// <summary>
+        /// Fetch an instanciated node by type
+        /// </summary>
+        /// <typeparam name="T">Node type</typeparam>
+        /// <param name="num">node offset (in case of multiple instances of a same type)</param>
+        /// <returns>the {num} node found in the array (unsorted), null if the node wasnt found</returns>
         public T Query<T>(int num = 0) where T : BaseNode
         {
             int count = 0;
@@ -25,7 +34,34 @@ namespace ProcGen
             return null;
         }
 
-        public void Initialize()
+        /// <summary>
+        /// Evaluates a specific node from the graph and its subtree
+        /// </summary>
+        /// <param name="nodeIndex">node index in array</param>
+        public void EvaluateNode(int nodeIndex)
+        {
+            if (m_EvaluationStack.Count > 0)
+                throw new System.Exception("Graph failed to evaluate properly");
+
+            InternalEvaluate(nodeIndex);
+        }
+        /// <summary>
+        /// Evaluates a referenced node from the graph and its subtree
+        /// throws an exception if the node is not included in the graph.
+        /// </summary>
+        /// <param name="node">node reference belonging to the graph</param>
+        public void EvaluateNode(BaseNode node)
+        {
+            if (node.NodeIndex == -1 || System.Array.IndexOf(Nodes, node) == -1)
+                throw new System.Exception($"Node {node.GetType().Name} does not belong to current graph");
+
+            if (m_EvaluationStack.Count > 0)
+                throw new System.Exception("Graph failed to evaluate properly");
+
+            InternalEvaluate(node.NodeIndex);
+        }
+
+        internal void Initialize()
         {
             m_EvaluationStack.Capacity = Nodes.Length;
 
@@ -34,25 +70,6 @@ namespace ProcGen
                 Nodes[i].Initialize();
                 Nodes[i].SetIndex(i);
             }
-        }
-
-        public void EvaluateNode(int nodeIndex)
-        {
-            if (m_EvaluationStack.Count > 0)
-                throw new System.Exception("Graph failed to evaluate properly");
-
-            InternalEvaluate(nodeIndex);
-        }
-
-        public void EvaluateNode(BaseNode node)
-        {
-            if ( node.NodeIndex == -1 || System.Array.IndexOf(Nodes, node) == -1)
-                throw new System.Exception($"Node {node.GetType().Name} does not belong to current graph");
-
-            if (m_EvaluationStack.Count > 0)
-                throw new System.Exception("Graph failed to evaluate properly");
-
-            InternalEvaluate(node.NodeIndex);
         }
 
         private void InternalEvaluate(int targetNode)
@@ -68,7 +85,7 @@ namespace ProcGen
 
                 for (int i = 0; i < currentNode.Inputs.Length; ++i)
                 {
-                    ref NodeConnector connector = ref currentNode.Inputs[i];
+                    ref NodeInput connector = ref currentNode.Inputs[i];
                     BaseNode sourceNode = connector.Source;
 
                     if ( connector.IsConnectorValid() && !m_EvaluationStack.Contains(sourceNode.NodeIndex))

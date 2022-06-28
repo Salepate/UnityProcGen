@@ -1,3 +1,4 @@
+using ProcGen.Connector;
 using UnityEngine;
 
 namespace ProcGen.Nodes.Maths
@@ -7,8 +8,8 @@ namespace ProcGen.Nodes.Maths
     {
         public override void Initialize()
         {
-            Inputs = NodeConnector.CreateInputs(ConnectorType.SourceType);
-            Outputs = NodeOutput.CreateOutputs(ConnectorType.SourceType);
+            Inputs = this.CreateInputs(ConnectorType.SourceType);
+            Outputs = this.CreateOutputs(ConnectorType.SourceType);
         }
         public override void Evaluate()
         {

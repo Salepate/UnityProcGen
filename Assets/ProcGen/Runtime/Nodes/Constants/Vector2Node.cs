@@ -1,3 +1,4 @@
+using ProcGen.Connector;
 using UnityEngine;
 
 namespace ProcGen.Nodes.Constants
@@ -9,7 +10,7 @@ namespace ProcGen.Nodes.Constants
 
         public override void Initialize()
         {
-            Outputs = NodeOutput.CreateOutputs(ConnectorType.Vector2);
+            Outputs = this.CreateOutputs(ConnectorType.Vector2);
         }
         public override void Evaluate()
         {

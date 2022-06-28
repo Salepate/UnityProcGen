@@ -1,4 +1,5 @@
 using ProcGen;
+using ProcGen.Connector;
 
 namespace ProcGenSamples
 {
@@ -9,7 +10,7 @@ namespace ProcGenSamples
 
         public override void Initialize()
         {
-            Inputs = NodeConnector.CreateInputs(ConnectorType.Float);
+            Inputs = this.CreateInputs(ConnectorType.Float);
         }
         public override void Evaluate()
         {

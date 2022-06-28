@@ -1,3 +1,5 @@
+using ProcGen.Connector;
+
 namespace ProcGen.Nodes.Maths
 {
     [ProceduralNode(2, "A","B","Sub (A-B)")]
@@ -5,13 +7,13 @@ namespace ProcGen.Nodes.Maths
     {
         public override void Initialize()
         {
-            Inputs = NodeConnector.CreateInputs(ConnectorType.SourceType, ConnectorType.SourceType);
-            Outputs = NodeOutput.CreateOutputs(ConnectorType.SourceType);
+            Inputs = this.CreateInputs(ConnectorType.SourceType, ConnectorType.SourceType);
+            Outputs = this.CreateOutputs(ConnectorType.SourceType);
         }
         public override void Evaluate()
         {
-            ref NodeConnector firstInput = ref Inputs[0];
-            ref NodeConnector secondInput = ref Inputs[1];
+            ref NodeInput firstInput = ref Inputs[0];
+            ref NodeInput secondInput = ref Inputs[1];
             ConnectorType connectorType = ConnectorType.SourceType;
 
             if (firstInput.TryGetAttachedOutput(out NodeOutput inA))

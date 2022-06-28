@@ -1,4 +1,5 @@
 using ProcGen;
+using ProcGen.Connector;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
@@ -56,7 +57,7 @@ namespace ProcGenEditor
             // TODO: store in cache if performance is an issue
             string[] outputNames = s_DefaultOutputNames;
             ProceduralNodeAttribute procNode = nodeData.GetType().GetCustomAttribute<ProceduralNodeAttribute>();
-            string[] connectorNames = procNode != null ? procNode.ConnectorNames : s_DefaultConnectorNames;
+            string[] connectorNames = procNode != null ? procNode.InputNames : s_DefaultConnectorNames;
             if (procNode != null && procNode.OutputNames != null)
                 outputNames = procNode.OutputNames;
 

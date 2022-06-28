@@ -1,3 +1,4 @@
+using ProcGen.Connector;
 using UnityEngine;
 
 namespace ProcGen.Nodes.Composites
@@ -10,8 +11,8 @@ namespace ProcGen.Nodes.Composites
 
         public override void Initialize()
         {
-            Inputs = NodeConnector.CreateInputs(ConnectorType.Float, ConnectorType.Float);
-            Outputs = NodeOutput.CreateOutputs(ConnectorType.Vector2);
+            Inputs = this.CreateInputs(ConnectorType.Float, ConnectorType.Float);
+            Outputs = this.CreateOutputs(ConnectorType.Vector2);
         }
 
         public override void Evaluate()

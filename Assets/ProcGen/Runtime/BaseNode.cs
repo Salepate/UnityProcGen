@@ -1,3 +1,5 @@
+using ProcGen.Connector;
+
 namespace ProcGen
 {
 #if UNITY_EDITOR
@@ -10,7 +12,7 @@ namespace ProcGen
         /// <summary>
         /// Overrides to declare node inputs
         /// </summary>
-        public NodeConnector[] Inputs { get; protected set; }
+        public NodeInput[] Inputs { get; protected set; }
         /// <summary>
         /// Overrides to declare node outputs
         /// </summary>
@@ -19,7 +21,7 @@ namespace ProcGen
         public BaseNode()
         {
             NodeIndex = -1;
-            Inputs = new NodeConnector[0];
+            Inputs = new NodeInput[0];
             Outputs = new NodeOutput[0];
         }
 
