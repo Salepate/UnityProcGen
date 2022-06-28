@@ -6,7 +6,7 @@ namespace ProcGen.Nodes
     [ProceduralNode(0, "X","Y")]
     public class TileMapNode : BaseNode
     {
-        public Vector2Int m_Coordinate;
+        public Vector2Int Coordinate { get; set; }
 
         public override void Initialize()
         {
@@ -14,8 +14,8 @@ namespace ProcGen.Nodes
         }
         public override void Evaluate()
         {
-            Outputs[0].ValueInt = m_Coordinate.x;
-            Outputs[1].ValueInt = m_Coordinate.y;
+            Outputs[0].ValueInt = Coordinate.x;
+            Outputs[1].ValueInt = Coordinate.y;
         }
     }
 }

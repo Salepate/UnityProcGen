@@ -54,7 +54,7 @@ namespace ProcGenSamples
                 int x = i % TilesPerSide;
                 int y = i / TilesPerSide;
                 GameObject tile = m_Tiles[i];
-                m_Tilemap.m_Coordinate = new Vector2Int(x,y);
+                m_Tilemap.Coordinate = new Vector2Int(x,y);
                 Graph.Runtime.EvaluateNode(m_DungeonTile);
 
                 tile.transform.localScale = m_DungeonTile.IsTile ? Vector3.one : Vector3.zero; 
