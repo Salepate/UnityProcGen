@@ -26,18 +26,18 @@ namespace ProcGen.Nodes.Maths
 
             if (connectorType == ConnectorType.SourceType)
                 return;
+
+            Outputs[0].ConnectorType = connectorType;
             
             if (connectorType == ConnectorType.Integer)
             {
-                Outputs[0].ValueInt = Inputs[0].ReadInteger() + Inputs[1].ReadInteger();
-                if (Average)
-                    Outputs[0].ValueInt /= 2;
+                int factor = Average ? 2 : 1;
+                Outputs[0].ValueInt = (Inputs[0].ReadInteger() + Inputs[1].ReadInteger()) / factor;
             }
-            else // hopefully that will write float, vec2 and vec3
+            else
             {
-                Outputs[0].ValueVector3 = Inputs[0].ReadVector3() + Inputs[1].ReadVector3();
-                if (Average)
-                    Outputs[0].ValueVector3 *= 0.5f;
+                float ratio = Average ? 0.5f : 1f;
+                Outputs[0].ValueVector3 =(Inputs[0].ReadVector3() + Inputs[1].ReadVector3()) * ratio;
             }
         }
     }

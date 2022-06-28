@@ -28,11 +28,13 @@ namespace ProcGen.Nodes.Maths
             if (connectorType == ConnectorType.SourceType)
                 return;
 
+            Outputs[0].ConnectorType = connectorType;
+
             if (connectorType == ConnectorType.Integer)
             {
                 Outputs[0].ValueInt = Inputs[0].ReadInteger() * Inputs[1].ReadInteger();
             }
-            else // hopefully that will write float, vec2 and vec3
+            else
             {
                 Outputs[0].ValueVector3 = Vector3.Scale(Inputs[0].ReadVector3(), Inputs[1].ReadVector3());
             }

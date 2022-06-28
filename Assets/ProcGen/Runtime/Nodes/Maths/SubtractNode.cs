@@ -25,7 +25,9 @@ namespace ProcGen.Nodes.Maths
 
             if (connectorType == ConnectorType.SourceType)
                 return;
-            
+
+            Outputs[0].ConnectorType = connectorType;
+
             if (connectorType == ConnectorType.Integer)
             {
                 Outputs[0].ValueInt = Inputs[0].ReadInteger() - Inputs[1].ReadInteger();
