@@ -15,7 +15,7 @@ namespace ProcGen
     public class GenerativeGraph : ScriptableObject
     {
         public string SerializedGraph = "{}";                   // Store polymorphic data (without actual types)
-        public string[] NodeTypes = new string[0];              // Store node types
+        public GraphReflection Reflection = GraphReflection.Empty; // store reflection data
         [SerializeField]  internal NodeConnection[] Connections = new NodeConnection[0]; // Store connection (out->in) between nodes
         [SerializeField]  internal InputDefaultValue[] Values = new InputDefaultValue[0]; // Store default value when an input has no output connected to it // TODO: Expose values in editor
         public NodeMetadata[] Meta = new NodeMetadata[0]; // Store meta data (editor position) for each nodes
@@ -34,13 +34,11 @@ namespace ProcGen
 
             // nodes, edges, editor meta
             SerializedGraph = JsonConvert.SerializeObject(graph, settings);
-            NodeTypes = new string[graph.Nodes.Length];
-            for(int i = 0; i < graph.Nodes.Length; ++i)
+            Reflection = GraphReflection.FromArray(graph.Nodes);
+            for (int i = 0; i < graph.Nodes.Length; ++i)
             {
                 BaseNode node = graph.Nodes[i];
-                NodeTypes[i] = node.GetType().FullName;
                 AddNodeConnections(graph.Nodes, node, connections, values);
-
             }
 
             Connections = connections.ToArray();
@@ -56,7 +54,7 @@ namespace ProcGen
         /// <returns>a runtime graph ready to evaluate</returns>
         public RuntimeGraph Deserialize(JsonSerializerSettings settings, BaseNodeConverter nodeConverter)
         {
-            nodeConverter.SetTypeArray(NodeTypes);
+            nodeConverter.SetGraphReflection(Reflection);
             RuntimeGraph graph = JsonConvert.DeserializeObject<RuntimeGraph>(SerializedGraph, settings);
             graph.Initialize();
             for (int i = 0; i < Connections.Length; ++i)

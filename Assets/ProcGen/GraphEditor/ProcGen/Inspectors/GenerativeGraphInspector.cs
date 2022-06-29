@@ -41,7 +41,7 @@ namespace ProcGenEditor
         private string FormatHelpBox()
         {
             GenerativeGraph graph = (GenerativeGraph)target;
-            string information = string.Format("Nodes: {0}", graph.NodeTypes.Length);
+            string information = string.Format("Nodes: {0}", graph.Reflection.NodeTypes.Length);
             return information;
         }
 
