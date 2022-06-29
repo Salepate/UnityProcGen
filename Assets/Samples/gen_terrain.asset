@@ -12,22 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
   m_Name: gen_terrain
   m_EditorClassIdentifier: 
-  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.1,0.03]},{},{},{"Value":13.3},{"ManualTimeUpdate":true},{"Average":false},{},{"Value":10.0}]}'
-  NodeTypes:
-  - ProcGen.Nodes.UnityPerlinNode
-  - ProcGen.Nodes.Composites.CreateVector2Node
-  - ProcGen.Nodes.TileMapNode
-  - ProcGen.Nodes.Constants.Vector2Node
-  - ProcGenSamples.HeightMapNode
-  - ProcGen.Nodes.Maths.MultiplyNode
-  - ProcGen.Nodes.Constants.FloatNode
-  - ProcGenSamples.TimeSampler
-  - ProcGen.Nodes.Maths.AddNode
-  - ProcGen.Nodes.Maths.MultiplyNode
-  - ProcGen.Nodes.Constants.FloatNode
+  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.1,0.03]},{},{"Value":13.3},{"Average":false},{},{"Value":10.0},{},{"ManualTimeUpdate":false}]}'
+  Reflection:
+    Assemblies:
+    - ProcGen.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Types:
+    - ProcGen.Nodes.UnityPerlinNode
+    - ProcGen.Nodes.Composites.CreateVector2Node
+    - ProcGen.Nodes.TileMapNode
+    - ProcGen.Nodes.Constants.Vector2Node
+    - ProcGen.Nodes.Maths.MultiplyNode
+    - ProcGen.Nodes.Constants.FloatNode
+    - ProcGen.Nodes.Maths.AddNode
+    - ProcGenSamples.HeightMapNode
+    - ProcGenSamples.TimeSampler
+    NodeTypes:
+    - AssemblyIndex: 0
+      NameIndex: 0
+    - AssemblyIndex: 0
+      NameIndex: 1
+    - AssemblyIndex: 0
+      NameIndex: 2
+    - AssemblyIndex: 0
+      NameIndex: 3
+    - AssemblyIndex: 0
+      NameIndex: 4
+    - AssemblyIndex: 0
+      NameIndex: 5
+    - AssemblyIndex: 0
+      NameIndex: 6
+    - AssemblyIndex: 0
+      NameIndex: 4
+    - AssemblyIndex: 0
+      NameIndex: 5
+    - AssemblyIndex: 1
+      NameIndex: 7
+    - AssemblyIndex: 1
+      NameIndex: 8
   Connections:
   - InputNode: 0
-    OutputNode: 8
+    OutputNode: 6
     InputSlot: 0
     OutputSlot: 0
   - InputNode: 0
@@ -43,32 +68,32 @@ MonoBehaviour:
     InputSlot: 1
     OutputSlot: 1
   - InputNode: 4
-    OutputNode: 5
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 5
     OutputNode: 0
     InputSlot: 0
     OutputSlot: 0
-  - InputNode: 5
-    OutputNode: 6
+  - InputNode: 4
+    OutputNode: 5
     InputSlot: 1
     OutputSlot: 0
-  - InputNode: 8
-    OutputNode: 9
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 8
-    OutputNode: 1
-    InputSlot: 1
-    OutputSlot: 0
-  - InputNode: 9
+  - InputNode: 6
     OutputNode: 7
     InputSlot: 0
     OutputSlot: 0
-  - InputNode: 9
-    OutputNode: 10
+  - InputNode: 6
+    OutputNode: 1
     InputSlot: 1
+    OutputSlot: 0
+  - InputNode: 7
+    OutputNode: 10
+    InputSlot: 0
+    OutputSlot: 0
+  - InputNode: 7
+    OutputNode: 8
+    InputSlot: 1
+    OutputSlot: 0
+  - InputNode: 9
+    OutputNode: 4
+    InputSlot: 0
     OutputSlot: 0
   Values:
   - Node: 0
@@ -101,12 +126,6 @@ MonoBehaviour:
       height: 126
   - Position:
       serializedVersion: 2
-      x: 650
-      y: 118
-      width: 112
-      height: 88
-  - Position:
-      serializedVersion: 2
       x: 477
       y: 118
       width: 123
@@ -117,12 +136,6 @@ MonoBehaviour:
       y: 294
       width: 223
       height: 106
-  - Position:
-      serializedVersion: 2
-      x: -517
-      y: -331
-      width: 187
-      height: 154
   - Position:
       serializedVersion: 2
       x: 48
@@ -137,7 +150,19 @@ MonoBehaviour:
       height: 112
   - Position:
       serializedVersion: 2
-      x: -458
-      y: -121
+      x: -648
+      y: -97
       width: 223
       height: 106
+  - Position:
+      serializedVersion: 2
+      x: 632
+      y: 118
+      width: 112
+      height: 88
+  - Position:
+      serializedVersion: 2
+      x: -648
+      y: -251
+      width: 187
+      height: 154

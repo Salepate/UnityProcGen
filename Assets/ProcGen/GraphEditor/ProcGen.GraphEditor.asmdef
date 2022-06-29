@@ -1,0 +1,19 @@
+{
+    "name": "ProcGen.GraphEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:bfa64926e0cad73468e13922ee0e0830",
+        "GUID:39bad35d850478b42b3a21a9243c58f0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

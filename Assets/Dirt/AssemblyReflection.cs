@@ -20,7 +20,7 @@ namespace Dirt.Utility
 
             for (int i = 0; i < missingAssemblies.Count(); ++i)
             {
-                Debug.LogError($"Loading Assembly {missingAssemblies.ElementAt(i)}");
+                Debug.Log($"Loading Assembly {missingAssemblies.ElementAt(i)}");
             }
 
             IEnumerable<Assembly> gameAssemblies = loadedAsses.Where(ass => assemblies.Contains(ass.FullName));

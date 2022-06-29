@@ -1,9 +1,7 @@
-using Dirt.Utility;
 using ProcGen;
 using ProcGen.Connector;
 using ProcGen.Debug;
 using ProcGen.Serialization;
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -38,7 +36,7 @@ namespace ProcGenEditor
             var editor = GetWindow<ProcGenGraphEditor>();
             editor.LoadGenerativeGraph(graphInstance);
             GraphDebuggerBehaviour dbg = GameObject.FindObjectOfType<GraphDebuggerBehaviour>();
-            if ( dbg == null )
+            if (dbg == null)
             {
                 GameObject dbgObj = new GameObject("GraphDebugger");
                 dbgObj.hideFlags = HideFlags.DontSave | HideFlags.DontSaveInEditor;
@@ -63,7 +61,7 @@ namespace ProcGenEditor
         private void OnEnable()
         {
             var vt = Resources.Load<VisualTreeAsset>("window-procgen");
-            var template =  vt.CloneTree();
+            var template = vt.CloneTree();
             rootVisualElement.Add(template);
             template.StretchToParentSize();
             m_Provider = ScriptableObject.CreateInstance<SearchWindowProvider>();
@@ -86,7 +84,7 @@ namespace ProcGenEditor
             graphView.AddManipulator(new RectangleSelector());
             graphView.SetupZoom(0.5f, ContentZoomer.DefaultMaxScale);
             graphView.NotifyGraphUpdate = NotifyGraphChange;
-            
+
             rootVisualElement.Q("graphRoot").RegisterCallback<KeyDownEvent>(OnKey);
 
             m_Provider.GraphView = graphView;
@@ -98,7 +96,7 @@ namespace ProcGenEditor
             ResetGraph();
             GraphInstance = graphInstance;
 
-            if ( GraphInstance.Runtime == null) 
+            if (GraphInstance.Runtime == null)
                 GraphInstance.Runtime = graphInstance.Graph.Deserialize(ProcGenSerialization.SerializationSettings, ProcGenSerialization.NodeConverter);
 
             GenerativeGraph graph = graphInstance.Graph;
@@ -106,7 +104,7 @@ namespace ProcGenEditor
 
             List<ProcGenGraphNodeView> nodeViews = new List<ProcGenGraphNodeView>();
 
-            for(int i = 0; i < GraphInstance.Runtime.Nodes.Length; ++i)
+            for (int i = 0; i < GraphInstance.Runtime.Nodes.Length; ++i)
             {
                 ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(GraphInstance.Runtime.Nodes[i]);
                 nodeView.DataUpdate = NotifyGraphChange;
@@ -118,13 +116,13 @@ namespace ProcGenEditor
             for (int i = 0; i < nodeViews.Count; ++i)
             {
                 ProcGenGraphNodeView nodeView = nodeViews[i];
-                for(int j = 0; j < nodeView.Node.Inputs.Length; ++j)
+                for (int j = 0; j < nodeView.Node.Inputs.Length; ++j)
                 {
                     ref NodeInput input = ref nodeView.Node.Inputs[j];
-                    if ( input.IsConnectorValid())
+                    if (input.IsConnectorValid())
                     {
                         int outputIndex = System.Array.IndexOf(GraphInstance.Runtime.Nodes, input.Source);
-                        if ( nodeView.TryGetPort(j, false, out Port inputPort)
+                        if (nodeView.TryGetPort(j, false, out Port inputPort)
                             && nodeViews[outputIndex].TryGetPort(input.SourceOutputIndex, true, out Port outputPort))
                         {
                             var edge = inputPort.ConnectTo(outputPort);
@@ -139,7 +137,7 @@ namespace ProcGenEditor
             }
         }
 
-        private void NotifyGraphChange()
+        internal void NotifyGraphChange()
         {
             if (m_GraphDebugger != null)
             {
@@ -160,10 +158,10 @@ namespace ProcGenEditor
             if (filePath.StartsWith(Application.dataPath))
                 filePath = filePath.Substring(Application.dataPath.Length - "Assets".Length);
 
-            if ( !string.IsNullOrEmpty(filePath))
+            if (!string.IsNullOrEmpty(filePath))
             {
                 GenerativeGraph graphAsset = AssetDatabase.LoadAssetAtPath<GenerativeGraph>(filePath);
-                if ( graphAsset != null)
+                if (graphAsset != null)
                 {
                     QuickLoadGraph(graphAsset);
                 }
@@ -172,7 +170,7 @@ namespace ProcGenEditor
 
         private void OnKey(KeyDownEvent keyEvent)
         {
-            if (keyEvent.keyCode == KeyCode.Tab )
+            if (keyEvent.keyCode == KeyCode.Tab)
             {
                 Vector2 referencePosition;
                 referencePosition = keyEvent.imguiEvent.mousePosition;
@@ -184,56 +182,6 @@ namespace ProcGenEditor
         private void DisplayContextMenu(Vector2 position)
         {
             SearchWindow.Open(new SearchWindowContext(position, 200f, 0.0f), m_Provider);
-        }
-
-
-        private class SearchWindowProvider : ScriptableObject, ISearchWindowProvider
-        {
-            private string[] m_Assemblies;
-            
-            public ProcGenGraphView GraphView { get; set; }
-            public VisualElement EditorRoot => Editor.rootVisualElement;
-            public ProcGenGraphEditor Editor { get; set; }
-
-            public SearchWindowProvider()
-            {
-                m_Assemblies = new string[1];
-                m_Assemblies[0] = typeof(BaseNode).Assembly.FullName;
-            }
-
-            public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
-            {
-                var res = new List<SearchTreeEntry>();
-                var nodes = AssemblyReflection.BuildTypeMap<BaseNode>(m_Assemblies);
-                res.Add(new SearchTreeGroupEntry(new GUIContent("Create Node"), 0));
-                foreach(var nodeEntry in nodes)
-                {
-                    if (nodeEntry.Value.IsAbstract)
-                        continue;
-
-                    res.Add(new SearchTreeEntry(new GUIContent(ProcGenEditorHelper.FormatNodeName(nodeEntry.Value.Name)))
-                    {
-                        level = 1,
-                        userData = nodeEntry.Value
-                    });
-                }
-                return res;
-            }
-
-            public bool OnSelectEntry(SearchTreeEntry searchEntry, SearchWindowContext context)
-            {
-                BaseNode node = (BaseNode) CreateInstance((Type)searchEntry.userData);
-                node.Initialize();
-                node.SetIndex(Editor.GraphInstance.Runtime.Nodes.Length);
-                ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(node);
-                nodeView.DataUpdate = Editor.NotifyGraphChange;
-                var windowMousePosition = EditorRoot.ChangeCoordinatesTo(EditorRoot.parent, context.screenMousePosition - Editor.position.position);
-                var graphMousePosition = GraphView.contentViewContainer.WorldToLocal(windowMousePosition);
-                ArrayUtility.Add(ref Editor.GraphInstance.Runtime.Nodes, node);
-                GraphView.AddElement(nodeView);
-                nodeView.SetOrigin(graphMousePosition);
-                return true;
-            }
         }
     }
 }

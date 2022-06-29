@@ -12,45 +12,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
   m_Name: gen_dungeon
   m_EditorClassIdentifier: 
-  SerializedGraph: '{"Nodes":[{"Threshold":0.5},{},{},{"m_Coordinate":{}},{"Value":[0.2,0.2]}]}'
-  NodeTypes:
-  - ProcGenSamples.DungeonTileNode
-  - ProcGen.Nodes.UnityPerlinNode
-  - ProcGen.Nodes.Composites.CreateVector2Node
-  - ProcGen.Nodes.TileMapNode
-  - ProcGen.Nodes.Constants.Vector2Node
+  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.2,0.2]},{"Threshold":0.5}]}'
+  Reflection:
+    Assemblies:
+    - ProcGen.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Types:
+    - ProcGen.Nodes.UnityPerlinNode
+    - ProcGen.Nodes.Composites.CreateVector2Node
+    - ProcGen.Nodes.TileMapNode
+    - ProcGen.Nodes.Constants.Vector2Node
+    - ProcGenSamples.DungeonTileNode
+    NodeTypes:
+    - AssemblyIndex: 0
+      NameIndex: 0
+    - AssemblyIndex: 0
+      NameIndex: 1
+    - AssemblyIndex: 0
+      NameIndex: 2
+    - AssemblyIndex: 0
+      NameIndex: 3
+    - AssemblyIndex: 1
+      NameIndex: 4
   Connections:
   - InputNode: 0
     OutputNode: 1
     InputSlot: 0
+    OutputSlot: 0
+  - InputNode: 0
+    OutputNode: 3
+    InputSlot: 1
     OutputSlot: 0
   - InputNode: 1
     OutputNode: 2
     InputSlot: 0
     OutputSlot: 0
   - InputNode: 1
-    OutputNode: 4
-    InputSlot: 1
-    OutputSlot: 0
-  - InputNode: 2
-    OutputNode: 3
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 2
-    OutputNode: 3
+    OutputNode: 2
     InputSlot: 1
     OutputSlot: 1
+  - InputNode: 4
+    OutputNode: 0
+    InputSlot: 0
+    OutputSlot: 0
   Values:
-  - Node: 1
+  - Node: 0
     Slot: 2
     Value: {x: 0, y: 0, z: 0, w: 0}
   Meta:
-  - Position:
-      serializedVersion: 2
-      x: 397
-      y: 37
-      width: 223
-      height: 106
   - Position:
       serializedVersion: 2
       x: 220
@@ -67,11 +76,17 @@ MonoBehaviour:
       serializedVersion: 2
       x: -253
       y: 37
-      width: 223
-      height: 150
+      width: 96
+      height: 112
   - Position:
       serializedVersion: 2
       x: -62
       y: 224
       width: 223
       height: 126
+  - Position:
+      serializedVersion: 2
+      x: 455
+      y: 37
+      width: 223
+      height: 106
