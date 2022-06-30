@@ -39,22 +39,66 @@ namespace ProcGenEditor
             m_Assemblies = assemblies.ToArray();
         }
 
+        private class SearchTreeContainer
+        {
+            public string ContainerName;
+            public List<Tuple<string, Type>> Nodes;
+
+            public SearchTreeContainer(string containerName)
+            {
+                ContainerName = containerName;
+                Nodes = new List<Tuple<string, Type>>();
+            }
+        }
+
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
             var res = new List<SearchTreeEntry>();
             var nodes = AssemblyReflection.BuildTypeMap<BaseNode>(m_Assemblies);
             res.Add(new SearchTreeGroupEntry(new GUIContent("Create Node"), 0));
+
+            Dictionary<string, SearchTreeContainer> containers = new Dictionary<string, SearchTreeContainer>();
+
+            // build groups
             foreach(var nodeEntry in nodes)
             {
                 if (nodeEntry.Value.IsAbstract)
                     continue;
 
-                res.Add(new SearchTreeEntry(new GUIContent(ProcGenEditorHelper.FormatNodeName(nodeEntry.Value.Name)))
+                string[] namespaces = nodeEntry.Value.FullName.Split('.');
+                string sub = "Default";
+
+                if (namespaces.Length > 1)
+                    sub = namespaces[namespaces.Length - 2];
+
+                if (!containers.TryGetValue(sub, out SearchTreeContainer container))
                 {
-                    level = 1,
-                    userData = nodeEntry.Value
-                });
+                    container = new SearchTreeContainer(sub);
+                    containers.Add(sub, container);
+                }
+                container.Nodes.Add(Tuple.Create(nodeEntry.Value.Name, nodeEntry.Value));
+
+
             }
+
+            var sortedGroups = containers.Values.ToList();
+            sortedGroups.Sort((a, b) => a.ContainerName.CompareTo(b.ContainerName));
+            for(int i = 0; i < sortedGroups.Count; ++i)
+            {
+                sortedGroups[i].Nodes.Sort((a, b) => a.Item1.CompareTo(b.Item1));
+                res.Add(new SearchTreeGroupEntry(new GUIContent(sortedGroups[i].ContainerName), 1));
+                for(int j = 0; j < sortedGroups[i].Nodes.Count; ++j)
+                {
+                    var nodeEntry = sortedGroups[i].Nodes[j];
+
+                    res.Add(new SearchTreeEntry(new GUIContent(ProcGenEditorHelper.FormatNodeName(nodeEntry.Item1)))
+                    {
+                        level = 2,
+                        userData = nodeEntry.Item2
+                    });
+                }
+            }
+
             return res;
         }
 
