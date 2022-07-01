@@ -17,6 +17,7 @@ namespace ProcGenEditor
         private static readonly string[] s_DefaultOutputNames = new string[1] { "Output" };
         public Vector2 Origin { get; private set; }
         public BaseNode Node { get; private set; }
+        public Group ParentGroup { get; set; }
 
         private Dictionary<Port, PortTuple> m_PortMap;
         private Dictionary<PortTuple, Port> m_InversePortMap;

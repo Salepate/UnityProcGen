@@ -60,33 +60,76 @@ MonoBehaviour:
     Slot: 2
     Value: {x: 0, y: 0, z: 0, w: 0}
   Meta:
+    Groups: []
+    Nodes:
+    - Position:
+        serializedVersion: 2
+        x: 220
+        y: 37
+        width: 169
+        height: 136
+      GroupIndex: 0
+    - Position:
+        serializedVersion: 2
+        x: 26
+        y: 37
+        width: 135
+        height: 112
+      GroupIndex: 0
+    - Position:
+        serializedVersion: 2
+        x: -253
+        y: 37
+        width: 96
+        height: 112
+      GroupIndex: 0
+    - Position:
+        serializedVersion: 2
+        x: -62
+        y: 224
+        width: 223
+        height: 126
+      GroupIndex: 0
+    - Position:
+        serializedVersion: 2
+        x: 455
+        y: 37
+        width: 223
+        height: 106
+      GroupIndex: 0
+  Tmp:
   - Position:
       serializedVersion: 2
       x: 220
       y: 37
       width: 169
       height: 136
+    GroupIndex: 0
   - Position:
       serializedVersion: 2
       x: 26
       y: 37
       width: 135
       height: 112
+    GroupIndex: 0
   - Position:
       serializedVersion: 2
       x: -253
       y: 37
       width: 96
       height: 112
+    GroupIndex: 0
   - Position:
       serializedVersion: 2
       x: -62
       y: 224
       width: 223
       height: 126
+    GroupIndex: 0
   - Position:
       serializedVersion: 2
       x: 455
       y: 37
       width: 223
       height: 106
+    GroupIndex: 0

@@ -104,12 +104,26 @@ namespace ProcGenEditor
 
             List<ProcGenGraphNodeView> nodeViews = new List<ProcGenGraphNodeView>();
 
+            Group[] groups = new Group[graph.Meta.Groups.Length];
+
+            for(int i = 0; i < graph.Meta.Groups.Length; ++i)
+            {
+                groups[i] = m_Provider.GraphView.CreateGroup(graph.Meta.Groups[i].Title);
+                m_Provider.GraphView.AddElement(groups[i]);
+            }
+
             for (int i = 0; i < GraphInstance.Runtime.Nodes.Length; ++i)
             {
+                int groupIdx = graph.Meta.Nodes[i].GroupIndex;
                 ProcGenGraphNodeView nodeView = new ProcGenGraphNodeView(GraphInstance.Runtime.Nodes[i]);
                 nodeView.DataUpdate = NotifyGraphChange;
                 nodeViews.Add(nodeView);
-                nodeView.SetPosition(graph.Meta[i].Position);
+                nodeView.SetPosition(graph.Meta.Nodes[i].Position);
+                if (groupIdx != -1 )
+                {
+                    groups[groupIdx].AddElement(nodeView);
+                    nodeView.ParentGroup = groups[groupIdx];
+                }
                 m_Provider.GraphView.AddElement(nodeView);
             }
 
@@ -148,7 +162,7 @@ namespace ProcGenEditor
         private void SaveGenerativeGraph()
         {
             GraphInstance.Graph.SerializeGraph(GraphInstance.Runtime, ProcGenSerialization.SerializationSettings);
-            GraphInstance.Graph.Meta = m_Provider.GraphView.SerializeNodeMeta(GraphInstance.Runtime);
+            GraphInstance.Graph.Meta = m_Provider.GraphView.SerializeGraphMetadata(GraphInstance.Runtime);
             EditorUtility.SetDirty(GraphInstance.Graph);
         }
 

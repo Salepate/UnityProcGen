@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using ProcGen.Connector;
+using ProcGen.Model;
 using ProcGen.Serialization;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace ProcGen
         public GraphReflection Reflection = GraphReflection.Empty; // store reflection data
         [SerializeField]  internal NodeConnection[] Connections = new NodeConnection[0]; // Store connection (out->in) between nodes
         [SerializeField]  internal InputDefaultValue[] Values = new InputDefaultValue[0]; // Store default value when an input has no output connected to it // TODO: Expose values in editor
-        public NodeMetadata[] Meta = new NodeMetadata[0]; // Store meta data (editor position) for each nodes
+        public GraphMetadata Meta = new GraphMetadata(); // Store meta data (editor position) for each nodes
 
         /// <summary>
         /// Call this to serialize changes made to the runtime graph and update the GenerativeGraph
@@ -122,12 +123,6 @@ namespace ProcGen
                 Slot = slot;
                 Value = value;
             }
-        }
-
-        [System.Serializable]
-        public struct NodeMetadata
-        {
-            public Rect Position;
         }
     }
 }
