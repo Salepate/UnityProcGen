@@ -3,6 +3,12 @@
     <uie:Toolbar name="editor-toolbar">
         <uie:ToolbarButton text="Open" display-tooltip-when-elided="true" name="button-open" />
         <uie:ToolbarButton text="Save" display-tooltip-when-elided="true" name="button-save" />
+        <uie:ToolbarButton text="Inspector" display-tooltip-when-elided="true" name="button-inspector" style="display: flex;" />
     </uie:Toolbar>
-    <ui:VisualElement name="graphRoot" style="height: 100%;" />
+    <ui:VisualElement name="layout" style="flex-grow: 1; flex-shrink: 0; flex-direction: row;">
+        <ui:VisualElement name="graphRoot" style="height: 100%; flex-direction: row; flex-grow: 1; flex-shrink: 0;" />
+        <ui:VisualElement name="graphInspector" style="flex-direction: row; display: flex; flex-shrink: 0; flex-grow: 0.3; visibility: visible; overflow: visible; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; max-width: 250px;">
+            <ui:IMGUIContainer style="flex-grow: 1; max-width: 100%; max-height: 100%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

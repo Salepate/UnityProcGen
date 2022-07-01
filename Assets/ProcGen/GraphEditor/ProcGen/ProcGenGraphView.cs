@@ -15,6 +15,7 @@ namespace ProcGenEditor
     public class ProcGenGraphView : GraphView
     {
         public System.Action NotifyGraphUpdate;
+        public System.Action<GraphElement> NotifyElementInspect;
         public GenerativeGraphInstance GraphInstance { get; set; }
         public ProcGenGraphView()
         {
@@ -97,6 +98,13 @@ namespace ProcGenEditor
             return changes;
         }
 
+        public override void AddToSelection(ISelectable selectable)
+        {
+            base.AddToSelection(selectable);
+            if (selectable is GraphElement graphElem)
+                NotifyElementInspect?.Invoke(graphElem);
+        }
+
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             if ( selection.Count > 0 )
@@ -146,6 +154,7 @@ namespace ProcGenEditor
             Group group = new Group();
             group.title = label;
             group.AddManipulator(new ContextualMenuManipulator(BuildGroupContextualMenu));
+            group.style.opacity = 1f;
             AddElement(group);
             return group;
         }
@@ -166,7 +175,8 @@ namespace ProcGenEditor
                 groupIndices.Add(group, idx);
                 groupsMeta.Add(new GroupMetadata()
                 {
-                    Title = group.title
+                    Title = group.title,
+                    Color = ProcGenEditorHelper.BackgroundToColor(group)
                 });
             });
 

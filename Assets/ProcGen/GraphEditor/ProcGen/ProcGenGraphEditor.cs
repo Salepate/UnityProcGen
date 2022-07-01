@@ -2,6 +2,7 @@ using ProcGen;
 using ProcGen.Connector;
 using ProcGen.Debug;
 using ProcGen.Serialization;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -13,6 +14,7 @@ namespace ProcGenEditor
     public class ProcGenGraphEditor : EditorWindow
     {
         public GenerativeGraphInstance GraphInstance { get; private set; }
+        public ProcGenGraphElementInspector ElementInspector { get; private set; }
         private SearchWindowProvider m_Provider;
         private GraphDebuggerBehaviour m_GraphDebugger;
 
@@ -69,6 +71,9 @@ namespace ProcGenEditor
             VisualElement toolbar = rootVisualElement.Q<VisualElement>("editor-toolbar");
             toolbar.Q<Button>("button-save").clicked += SaveGenerativeGraph;
             toolbar.Q<Button>("button-open").clicked += OpenGenerativeGraph;
+            toolbar.Q<Button>("button-inspector").clicked += ToggleInspector;
+            ElementInspector = new ProcGenGraphElementInspector(rootVisualElement.Q("graphInspector"));
+            ToggleInspector();
         }
 
         public void ResetGraph()
@@ -84,11 +89,11 @@ namespace ProcGenEditor
             graphView.AddManipulator(new RectangleSelector());
             graphView.SetupZoom(0.5f, ContentZoomer.DefaultMaxScale);
             graphView.NotifyGraphUpdate = NotifyGraphChange;
-
+            graphView.styleSheets.Add(style);
+            graphView.NotifyElementInspect += ElementInspector.InspectElement;
             rootVisualElement.Q("graphRoot").RegisterCallback<KeyDownEvent>(OnKey);
 
             m_Provider.GraphView = graphView;
-            graphView.styleSheets.Add(style);
         }
 
         private void LoadGenerativeGraph(GenerativeGraphInstance graphInstance)
@@ -109,6 +114,10 @@ namespace ProcGenEditor
             for(int i = 0; i < graph.Meta.Groups.Length; ++i)
             {
                 groups[i] = m_Provider.GraphView.CreateGroup(graph.Meta.Groups[i].Title);
+                Color c = graph.Meta.Groups[i].Color;
+                groups[i].style.opacity = c.a;
+                c.a = 1f;
+                groups[i].style.backgroundColor = c;
                 m_Provider.GraphView.AddElement(groups[i]);
             }
 
@@ -166,6 +175,7 @@ namespace ProcGenEditor
             EditorUtility.SetDirty(GraphInstance.Graph);
         }
 
+
         private void OpenGenerativeGraph()
         {
             string filePath = EditorUtility.OpenFilePanel("Graph", Application.dataPath, "asset");
@@ -181,6 +191,12 @@ namespace ProcGenEditor
                 }
             }
         }
+
+        private void ToggleInspector()
+        {
+            ElementInspector.Container.style.display = (DisplayStyle) (1 - (int) (ElementInspector.Container.style.display.value));
+        }
+
 
         private void OnKey(KeyDownEvent keyEvent)
         {

@@ -22,7 +22,7 @@ namespace ProcGenEditor
         private Dictionary<Port, PortTuple> m_PortMap;
         private Dictionary<PortTuple, Port> m_InversePortMap;
 
-
+        public IMGUIContainer IMGUI { get; private set; }
         public bool TryGetPortData(Port port, out int slotIndex, out bool isOutput)
         {
             slotIndex = 0;
@@ -87,19 +87,19 @@ namespace ProcGenEditor
                 m_InversePortMap.Add(new PortTuple(true, i), port);
             }
 
-            var customGUI = new IMGUIContainer();
-            customGUI.userData = Editor.CreateEditor(nodeData, typeof(BaseNodeInspector));
-            customGUI.contextType = ContextType.Editor;
-            customGUI.onGUIHandler = () =>
+            IMGUI = new IMGUIContainer();
+            IMGUI.userData = Editor.CreateEditor(nodeData, typeof(BaseNodeInspector));
+            IMGUI.contextType = ContextType.Editor;
+            IMGUI.onGUIHandler = () =>
             {
                 EditorGUI.BeginChangeCheck();
-                ((Editor)customGUI.userData).OnInspectorGUI();
+                ((Editor)IMGUI.userData).OnInspectorGUI();
                 if ( EditorGUI.EndChangeCheck())
                 {
                     DataUpdate?.Invoke();
                 }
             };
-            extensionContainer.Add(customGUI);
+            extensionContainer.Add(IMGUI);
             RefreshExpandedState();
         }
 

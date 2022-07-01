@@ -13,6 +13,7 @@ namespace ProcGen.Model
     public struct GroupMetadata
     {
         public string Title;
+        public Color Color;
     }
 
     [System.Serializable]
