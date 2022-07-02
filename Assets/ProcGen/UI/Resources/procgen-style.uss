@@ -16,3 +16,7 @@
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
+
+#extension {
+    background-color: rgba(77, 77, 77, 255);
+}
