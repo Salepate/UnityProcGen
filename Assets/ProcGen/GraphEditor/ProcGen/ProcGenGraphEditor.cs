@@ -102,7 +102,7 @@ namespace ProcGenEditor
             GraphInstance = graphInstance;
 
             if (GraphInstance.Runtime == null)
-                GraphInstance.Runtime = graphInstance.Graph.Deserialize(ProcGenSerialization.SerializationSettings, ProcGenSerialization.NodeConverter);
+                GraphInstance.GenerateRuntime();
 
             GenerativeGraph graph = graphInstance.Graph;
             m_Provider.GraphView.GraphInstance = GraphInstance;

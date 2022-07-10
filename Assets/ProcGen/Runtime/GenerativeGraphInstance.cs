@@ -16,7 +16,7 @@ namespace ProcGen
         /// <summary>
         /// Runtime graph is accessible after invoking GenerateRuntime()
         /// </summary>
-        public RuntimeGraph Runtime { get; set; }
+        public RuntimeGraph Runtime { get; private set; }
 
         /// <summary>
         /// Invoked in editor, when a change to the graph has been made (can be used to regenerate scene after changes)
