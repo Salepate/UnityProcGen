@@ -31,10 +31,10 @@ namespace ProcGen.Nodes.Maths
                 switch (source.ConnectorType)
                 {
                     case ConnectorType.Integer:
-                        outputValue.ValueInt = RemapValue(inputValue.ReadInteger(), Get(PrevMin).ReadInteger(), Get(PrevMax).ReadInteger(), Get(NewMin).ReadInteger(), Get(NewMax).ReadInteger());
+                        outputValue.Value.Int = RemapValue(inputValue.ReadInteger(), Get(PrevMin).ReadInteger(), Get(PrevMax).ReadInteger(), Get(NewMin).ReadInteger(), Get(NewMax).ReadInteger());
                         break;
                     case ConnectorType.Float:
-                        outputValue.ValueFloat = RemapValue(inputValue.ReadFloat(), Get(PrevMin).ReadFloat(), Get(PrevMax).ReadFloat(), Get(NewMin).ReadFloat(), Get(NewMax).ReadFloat());
+                        outputValue.Value.Float = RemapValue(inputValue.ReadFloat(), Get(PrevMin).ReadFloat(), Get(PrevMax).ReadFloat(), Get(NewMin).ReadFloat(), Get(NewMax).ReadFloat());
                         break;
                     case ConnectorType.Vector2:
                     case ConnectorType.Vector3:
@@ -43,7 +43,7 @@ namespace ProcGen.Nodes.Maths
                         float prevMax = Get(PrevMax).ReadFloat();
                         float newMin = Get(NewMin).ReadFloat();
                         float newMax = Get(NewMax).ReadFloat();
-                        outputValue.ValueVector3 = new Vector3()
+                        outputValue.Value.Vec3 = new Vector3()
                         {
                             x = RemapValue(inputVec.x, prevMin, prevMax, newMin, newMax),
                             y = RemapValue(inputVec.y, prevMin, prevMax, newMin, newMax),

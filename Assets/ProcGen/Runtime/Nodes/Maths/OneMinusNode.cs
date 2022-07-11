@@ -19,11 +19,11 @@ namespace ProcGen.Nodes.Maths
 
                 if ( source.ConnectorType == ConnectorType.Integer )
                 {
-                    Outputs[0].ValueInt = 1 - Inputs[0].ReadInteger();
+                    Outputs[0].Value.Int = 1 - Inputs[0].ReadInteger();
                 }
                 else
                 {
-                    Outputs[0].ValueVector3 = Vector3.one - Inputs[0].ReadVector3();
+                    Outputs[0].Value.Vec3 = Vector3.one - Inputs[0].ReadVector3();
                 }
             }
         }

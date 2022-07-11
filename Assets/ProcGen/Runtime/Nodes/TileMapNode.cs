@@ -15,8 +15,8 @@ namespace ProcGen.Nodes
         }
         public override void Evaluate()
         {
-            Outputs[0].ValueInt = Coordinate.x;
-            Outputs[1].ValueInt = Coordinate.y;
+            Outputs[0].Value.Int = Coordinate.x;
+            Outputs[1].Value.Int = Coordinate.y;
         }
     }
 }

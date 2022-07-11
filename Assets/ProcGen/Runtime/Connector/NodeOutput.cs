@@ -1,21 +1,13 @@
+using ProcGen.Buffer;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace ProcGen.Connector
 {
-    [StructLayout(LayoutKind.Explicit)]
     public struct NodeOutput
     {
-        [FieldOffset(0)]
         public ConnectorType ConnectorType;
-        [FieldOffset(4)]
-        public float ValueFloat;
-        [FieldOffset(4)]
-        public int ValueInt;
-        [FieldOffset(4)]
-        public Vector2 ValueVector2;
-        [FieldOffset(4)]
-        public Vector3 ValueVector3;
+        public ValueBuffer Value;
 
         public NodeOutput(ConnectorType connectorType) : this()
         {
@@ -29,13 +21,13 @@ namespace ProcGen.Connector
 
             switch (type)
             {
-                case ConnectorType.Integer: ValueInt = input.ReadInteger();
+                case ConnectorType.Integer: Value.Write(input.ReadInteger());
                     break;
-                case ConnectorType.Float: ValueFloat = input.ReadFloat();
+                case ConnectorType.Float: Value.Write(input.ReadFloat());
                     break;
-                case ConnectorType.Vector2: ValueVector2 = input.ReadVector2();
+                case ConnectorType.Vector2: Value.Write(input.ReadVector2());
                     break;
-                case ConnectorType.Vector3: ValueVector3 = input.ReadVector3();
+                case ConnectorType.Vector3: Value.Write(input.ReadVector3());
                     break;
             }
         }

@@ -13,17 +13,25 @@ namespace ProcGenSamples
         private List<GameObject> m_Tiles;
         // graph queries
         private TileMapNode m_Tilemap;
-        private DungeonTileNode m_DungeonTile;
 
         private void Awake()
         {
             AllocateTiles();
-            Graph.GenerateRuntime();
         }
         private void Start()
         {
             OnGraphChange();
             Graph.OnGraphUpdate += OnGraphChange; // only invoked in editor
+        }
+
+        private void OnEnable()
+        {
+            Graph.GenerateRuntime();
+
+        }
+        private void OnDisable()
+        {
+            Graph.Clear();
         }
 
         private void AllocateTiles()
@@ -33,9 +41,12 @@ namespace ProcGenSamples
             Quaternion baseRot = Quaternion.Euler(90f, 0f, 0f);
             for (int i = 0; i < TilesPerSide * TilesPerSide; ++i)
             {
+                int x = i % TilesPerSide;
+                int y = i / TilesPerSide;
                 GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 tile.transform.SetParent(rootObj.transform);
                 tile.transform.localRotation = baseRot;
+                tile.transform.localPosition = new Vector3(x - (TilesPerSide) / 2f, 0f, y - (TilesPerSide) / 2f);
                 m_Tiles.Add(tile);
             }
         }
@@ -43,7 +54,6 @@ namespace ProcGenSamples
         private void OnGraphChange()
         {
             m_Tilemap = Graph.Runtime.Query<TileMapNode>(); // just in case it was destroyed/recreated
-            m_DungeonTile = Graph.Runtime.Query<DungeonTileNode>();
             UpdateGrid();
         }
 
@@ -55,14 +65,9 @@ namespace ProcGenSamples
                 int y = i / TilesPerSide;
                 GameObject tile = m_Tiles[i];
                 m_Tilemap.Coordinate = new Vector2Int(x,y);
-                Graph.Runtime.EvaluateNode(m_DungeonTile);
-
-                tile.transform.localScale = m_DungeonTile.IsTile ? Vector3.one : Vector3.zero; 
-
-                if (m_DungeonTile.IsTile)
-                {
-                    tile.transform.localPosition = new Vector3(x - (TilesPerSide) / 2f, 0f, y - (TilesPerSide) / 2f);
-                }
+                Graph.Runtime.Compute();
+                int tileInt = Graph.Buffer.ReadValueInt(0);
+                tile.transform.localScale = Vector3.one * tileInt * Graph.Buffer.ReadValueFloat(1); 
             }
         }
     }

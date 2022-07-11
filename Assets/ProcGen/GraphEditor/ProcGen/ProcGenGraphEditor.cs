@@ -133,6 +133,11 @@ namespace ProcGenEditor
                     groups[groupIdx].AddElement(nodeView);
                     nodeView.ParentGroup = groups[groupIdx];
                 }
+                if ( i == (graph.MasterNode - 1) )
+                {
+                    nodeView.AddToClassList("masterNode");
+                    m_Provider.GraphView.CurrentMasterNode = nodeView;
+                }
                 m_Provider.GraphView.AddElement(nodeView);
             }
 

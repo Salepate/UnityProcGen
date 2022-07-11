@@ -14,7 +14,7 @@ namespace ProcGen.Nodes.Constants
         }
         public override void Evaluate()
         {
-            Outputs[0].ValueVector3 = Value;
+            Outputs[0].Value.Vec3 = Value;
         }
     }
 }

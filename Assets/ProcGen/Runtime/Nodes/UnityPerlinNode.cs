@@ -29,7 +29,7 @@ namespace ProcGen.Nodes
             Vector2 scale = Inputs[Scale].ReadVector2();
             Vector2 offset = Inputs[Offset].ReadVector2();
             Vector2 coord = Inputs[Coordinate].ReadVector2();
-            Outputs[OutputValue].ValueFloat = Mathf.PerlinNoise(coord.x * scale.x + offset.x, coord.y * scale.y + offset.y);
+            Outputs[OutputValue].Value.Float = Mathf.PerlinNoise(coord.x * scale.x + offset.x, coord.y * scale.y + offset.y);
         }
     }
 }

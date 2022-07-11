@@ -17,7 +17,7 @@ namespace ProcGen.Nodes.Composites
 
         public override void Evaluate()
         {
-            Outputs[0].ValueVector2 = new Vector2(Inputs[X].ReadFloat(), Inputs[Y].ReadFloat());
+            Outputs[0].Value.Vec2 = new Vector2(Inputs[X].ReadFloat(), Inputs[Y].ReadFloat());
         }
     }
 }

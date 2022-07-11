@@ -1,4 +1,6 @@
+using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace ProcGen.Connector
@@ -45,7 +47,18 @@ namespace ProcGen.Connector
             return false;
         }
 
-
+        public bool ReadBytesInto(IntPtr addrPointer, bool deleteData, byte[] destination, int offset)
+        {
+            int size = ConnectorHelper.GetDataSize(ConnectorType);
+            // naive
+            if ( IsConnectorValid())
+            {
+                Marshal.StructureToPtr(m_SourceOutput.Value, addrPointer, deleteData);
+                Marshal.Copy(addrPointer, destination, offset, size);
+                return true;
+            }
+            return false;
+        }
         public int ReadInteger()
         {
             if (IsConnectorValid())
@@ -67,7 +80,7 @@ namespace ProcGen.Connector
         {
             if (IsConnectorValid())
             {
-                return m_SourceOutput.ValueVector2;
+                return m_SourceOutput.Value.Vec2;
             }
             return Initial.InitialValueVector2;
         }
@@ -75,7 +88,7 @@ namespace ProcGen.Connector
         {
             if (IsConnectorValid())
             {
-                return m_SourceOutput.ValueVector3;
+                return m_SourceOutput.Value.Vec3;
             }
             return Initial.InitialValueVector3;
         }

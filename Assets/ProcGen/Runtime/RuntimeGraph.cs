@@ -10,12 +10,22 @@ namespace ProcGen
     {
         public BaseNode[] Nodes = new BaseNode[0];
 
+        public BaseNode TargetNode { get; private set; }
+
         private List<int> m_EvaluationStack; 
 
         internal RuntimeGraph()
         {
             m_EvaluationStack = new List<int>();
         }
+
+
+        public void Compute()
+        {
+            InternalEvaluate(TargetNode.NodeIndex);
+        }
+
+        /// Legacy
 
         /// <summary>
         /// Fetch an instanciated node by type
@@ -34,42 +44,25 @@ namespace ProcGen
             return null;
         }
 
-        /// <summary>
-        /// Evaluates a specific node from the graph and its subtree
-        /// </summary>
-        /// <param name="nodeIndex">node index in array</param>
-        public void EvaluateNode(int nodeIndex)
-        {
-            if (m_EvaluationStack.Count > 0)
-                throw new System.Exception("Graph failed to evaluate properly");
-
-            InternalEvaluate(nodeIndex);
-        }
-        /// <summary>
-        /// Evaluates a referenced node from the graph and its subtree
-        /// throws an exception if the node is not included in the graph.
-        /// </summary>
-        /// <param name="node">node reference belonging to the graph</param>
-        public void EvaluateNode(BaseNode node)
-        {
-            if (node.NodeIndex == -1 || System.Array.IndexOf(Nodes, node) == -1)
-                throw new System.Exception($"Node {node.GetType().Name} does not belong to current graph");
-
-            if (m_EvaluationStack.Count > 0)
-                throw new System.Exception("Graph failed to evaluate properly");
-
-            InternalEvaluate(node.NodeIndex);
-        }
-
-        internal void Initialize()
+        internal void Initialize(int mainNodeIndex)
         {
             m_EvaluationStack.Capacity = Nodes.Length;
+
+            if (mainNodeIndex != -1 && Nodes[mainNodeIndex] is IMasterNode )
+            {
+                TargetNode = Nodes[mainNodeIndex];
+            }
 
             for (int i = 0; i < Nodes.Length; ++i)
             {
                 Nodes[i].Initialize();
                 Nodes[i].SetIndex(i);
             }
+        }
+
+        public void SetMasterNode(BaseNode node)
+        {
+            TargetNode = node;
         }
 
         private void InternalEvaluate(int targetNode)

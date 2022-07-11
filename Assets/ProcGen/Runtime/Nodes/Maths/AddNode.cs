@@ -34,12 +34,12 @@ namespace ProcGen.Nodes.Maths
             if (connectorType == ConnectorType.Integer)
             {
                 int factor = Average ? 2 : 1;
-                Outputs[0].ValueInt = (Inputs[0].ReadInteger() + Inputs[1].ReadInteger()) / factor;
+                Outputs[0].Value.Int = (Inputs[0].ReadInteger() + Inputs[1].ReadInteger()) / factor;
             }
             else
             {
                 float ratio = Average ? 0.5f : 1f;
-                Outputs[0].ValueVector3 =(Inputs[0].ReadVector3() + Inputs[1].ReadVector3()) * ratio;
+                Outputs[0].Value.Vec3 =(Inputs[0].ReadVector3() + Inputs[1].ReadVector3()) * ratio;
             }
         }
     }

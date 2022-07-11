@@ -55,7 +55,7 @@ public class GridUpdater : MonoBehaviour
             int y = i % GridSize;
             int x = i / GridSize;
             tilemap.Coordinate = new Vector2Int(x, y);
-            Graph.Runtime.EvaluateNode(heightmap);
+            Graph.Runtime.Compute();
             float height = heightmap.Height;
             ref Vector3 p = ref m_Vertices[i];
             p.y = height;

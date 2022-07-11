@@ -25,12 +25,12 @@ namespace ProcGen.Nodes.Composites
         public override void Evaluate()
         {
             Vector3 input = Inputs[0].ReadVector3();
-            Outputs[0].ValueVector3 = new Vector3()
+            Outputs[0].Value.Write(new Vector3()
             {
                 x = GetAxisValue(ref input, X),
                 y = GetAxisValue(ref input, Y),
                 z = GetAxisValue(ref input, Z)
-            };
+            });
         }
 
         private static float GetAxisValue(ref Vector3 value, Axis axis)

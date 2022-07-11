@@ -18,5 +18,16 @@
 }
 
 #extension {
-    background-color: rgba(77, 77, 77, 255);
+    background-color: rgb(77, 77, 77);
+}
+
+.masterNode > #node-border {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(137, 76, 190, 255);
+    border-right-color: rgba(137, 76, 190, 255);
+    border-top-color: rgba(137, 76, 190, 255);
+    border-bottom-color: rgba(137, 76, 190, 255);
 }

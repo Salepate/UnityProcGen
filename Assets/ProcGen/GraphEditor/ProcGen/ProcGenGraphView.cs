@@ -17,6 +17,9 @@ namespace ProcGenEditor
         public System.Action NotifyGraphUpdate;
         public System.Action<GraphElement> NotifyElementInspect;
         public GenerativeGraphInstance GraphInstance { get; set; }
+
+        public ProcGenGraphNodeView CurrentMasterNode { get; set; }
+
         public ProcGenGraphView()
         {
             GridBackground gridBg = new GridBackground();
@@ -104,7 +107,6 @@ namespace ProcGenEditor
             if (selectable is GraphElement graphElem)
                 NotifyElementInspect?.Invoke(graphElem);
         }
-
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             if ( selection.Count > 0 )
@@ -121,6 +123,21 @@ namespace ProcGenEditor
                         }
                     }
                 });
+
+                if ( selection.Count == 1 && selection[0] is ProcGenGraphNodeView nodeView)
+                {
+                    if ( nodeView.Node is IMasterNode masterNode)
+                    {
+                        evt.menu.AppendAction("Set Master", (a) =>
+                        {
+                            if (CurrentMasterNode != null)
+                                CurrentMasterNode.RemoveFromClassList("masterNode");
+                            nodeView.AddToClassList("masterNode");
+                            GraphInstance.Runtime.SetMasterNode(nodeView.Node);
+                            CurrentMasterNode = nodeView;
+                        });
+                    }
+                }
             }
         }
         private void BuildGroupContextualMenu(ContextualMenuPopulateEvent evt)

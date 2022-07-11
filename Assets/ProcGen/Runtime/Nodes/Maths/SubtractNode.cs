@@ -32,11 +32,11 @@ namespace ProcGen.Nodes.Maths
 
             if (connectorType == ConnectorType.Integer)
             {
-                Outputs[0].ValueInt = Inputs[0].ReadInteger() - Inputs[1].ReadInteger();
+                Outputs[0].Value.Int = Inputs[0].ReadInteger() - Inputs[1].ReadInteger();
             }
             else // hopefully that will write float, vec2 and vec3
             {
-                Outputs[0].ValueVector3 = Inputs[0].ReadVector3() - Inputs[1].ReadVector3();
+                Outputs[0].Value.Vec3 = Inputs[0].ReadVector3() - Inputs[1].ReadVector3();
             }
         }
     }
