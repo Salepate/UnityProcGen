@@ -16,6 +16,7 @@ namespace ProcGenEditor.NodeEditor
 
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
             float lw = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = 10f;
             GUILayout.BeginHorizontal();
@@ -24,6 +25,7 @@ namespace ProcGenEditor.NodeEditor
             GUILayout.Space(5f);
             GUILayout.EndHorizontal();
             EditorGUIUtility.labelWidth = lw;
+            serializedObject.ApplyModifiedProperties();
         }
     }
 
