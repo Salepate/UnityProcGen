@@ -87,8 +87,11 @@ namespace ProcGenEditor
                     if ( elem is Edge edge )
                     {
                         ProcGenGraphNodeView inputNode = (ProcGenGraphNodeView) edge.input.node;
-                        inputNode.TryGetPortData(edge.input, out int edgeSlot, out _);
-                        inputNode.Node.Inputs[edgeSlot].Connect(null, 0);
+                        if ( inputNode != null)
+                        {
+                            inputNode.TryGetPortData(edge.input, out int edgeSlot, out _);
+                            inputNode.Node.Inputs[edgeSlot].Connect(null, 0);
+                        }
                         refreshGraph = true;
                     }
                 }

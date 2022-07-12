@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ProcGen.Nodes.Output
 {
-    [ProceduralNode(1,"First")]
+    [ProceduralNode(5, "In (1)", "In (2)", "In (3)", "In (4)", "In (5)")]
     public class GraphOutputNode : BaseNode, IMasterNode
     {
         public List<ConnectorType> BufferContent;

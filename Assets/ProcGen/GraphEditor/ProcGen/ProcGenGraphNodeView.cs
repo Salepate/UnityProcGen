@@ -12,6 +12,7 @@ namespace ProcGenEditor
     using PortTuple = System.Tuple<bool, int>;
     public class ProcGenGraphNodeView : Node
     {
+
         public System.Action DataUpdate;
         private static readonly string[] s_DefaultConnectorNames = new string[1] { "Input" };
         private static readonly string[] s_DefaultOutputNames = new string[1] { "Output" };
@@ -42,7 +43,6 @@ namespace ProcGenEditor
             return m_InversePortMap.TryGetValue(new PortTuple(isOutput, slotIndex), out port);
         }
 
-
         public ProcGenGraphNodeView()
         {
             m_PortMap = new Dictionary<Port, PortTuple>();
@@ -55,40 +55,12 @@ namespace ProcGenEditor
 
             this.Q<Label>("title-label").text = ProcGenEditorHelper.FormatNodeName(nodeData.GetType().Name);
 
-            // TODO: store in cache if performance is an issue
-            string[] outputNames = s_DefaultOutputNames;
-            ProceduralNodeAttribute procNode = nodeData.GetType().GetCustomAttribute<ProceduralNodeAttribute>();
-            string[] connectorNames = procNode != null ? procNode.InputNames : s_DefaultConnectorNames;
-            if (procNode != null && procNode.OutputNames != null)
-                outputNames = procNode.OutputNames;
-
-            for(int i = 0; Node.Inputs != null && i < Node.Inputs.Length; ++i)
-            {
-                int connectorNameIndex = Mathf.Min(i, connectorNames.Length - 1);
-                string connectorName = connectorNames[connectorNameIndex];
-                System.Type portType = ConnectorHelper.GetAssociatedType(Node.Inputs[i].ConnectorType);
-                var port = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, portType);
-                port.portName = connectorName;
-                port.userData = Node.Inputs[i].ConnectorType;
-                inputContainer.Add(port);
-                m_PortMap.Add(port, new PortTuple(false, i));
-                m_InversePortMap.Add(new PortTuple(false, i), port);
-            }
-            for(int i = 0; i < Node.Outputs.Length; ++i)
-            {
-                int outputNameIndex = Mathf.Min(i, outputNames.Length - 1);
-                string outputName = outputNames[outputNameIndex];
-                System.Type portType = ConnectorHelper.GetAssociatedType(Node.Outputs[i].ConnectorType);
-                var port = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, portType);
-                port.portName = outputName;
-                port.userData = Node.Outputs[i].ConnectorType;
-                outputContainer.Add(port);
-                m_PortMap.Add(port, new PortTuple(true, i));
-                m_InversePortMap.Add(new PortTuple(true, i), port);
-            }
-
+            InstantiatePorts(true);
+            InstantiatePorts(false);
+            BaseNodeInspector nodeEditor = (BaseNodeInspector) Editor.CreateEditor(nodeData);
+            nodeEditor.OnPortUpdate += OnPortUpdate;
             IMGUI = new IMGUIContainer();
-            IMGUI.userData = Editor.CreateEditor(nodeData, typeof(BaseNodeInspector));
+            IMGUI.userData = nodeEditor;
             IMGUI.contextType = ContextType.Editor;
             IMGUI.onGUIHandler = () =>
             {
@@ -101,6 +73,119 @@ namespace ProcGenEditor
             };
             extensionContainer.Add(IMGUI);
             RefreshExpandedState();
+        }
+
+        public void OnPortUpdate()
+        {
+            Node.Initialize();
+            //InstantiatePorts(true);
+            InstantiatePorts(false);
+        }
+
+        public void InstantiatePorts(bool outputPorts)
+        {
+            VisualElement container;
+            System.Array arr;
+            ProceduralNodeAttribute procNode = Node.GetType().GetCustomAttribute<ProceduralNodeAttribute>();
+            string[] connectorNames;
+            Direction portDir = Direction.Input;
+            Port.Capacity portCapacity = Port.Capacity.Single;
+
+            if (outputPorts)
+            {
+                connectorNames = procNode != null ? procNode.OutputNames : s_DefaultOutputNames;
+                container = outputContainer;
+                arr = Node.Outputs;
+                portCapacity = Port.Capacity.Multi;
+                portDir = Direction.Output;
+            }
+            else
+            {
+                connectorNames = procNode != null ? procNode.InputNames : s_DefaultConnectorNames;
+                container = inputContainer;
+                arr = Node.Inputs;
+
+            }
+
+            Dictionary<int, Edge> portConnections = new Dictionary<int, Edge>();
+
+            foreach (KeyValuePair<Port, PortTuple> portEntry in m_PortMap)
+            {
+                Port p = portEntry.Key;
+                if (p.connected && portEntry.Value.Item1 == outputPorts)
+                {
+                    foreach (var conn in p.connections)
+                    {
+                        portConnections.Add(portEntry.Value.Item2, conn);
+                    }
+                }
+            }
+
+            List<Port> ports = new List<Port>();
+            foreach(var port in m_PortMap)
+            {
+                if (port.Value.Item1 == outputPorts)
+                {
+                    container.Remove(port.Key);
+                    m_InversePortMap.Remove(port.Value);
+                    ports.Add(port.Key);
+                }
+            }
+            ports.ForEach(p =>
+            {
+                m_PortMap.Remove(p);
+            });
+
+
+            for (int i = 0; arr != null && i < arr.Length; ++i)
+            {
+                int connectorNameIndex = Mathf.Min(i, connectorNames.Length - 1);
+                string connectorName = connectorNames[connectorNameIndex];
+                System.Type portType;
+                ConnectorType connectorType;
+
+                if ( outputPorts )
+                    connectorType = Node.Outputs[i].ConnectorType;
+                else
+                    connectorType = Node.Inputs[i].ConnectorType;
+
+                portType = ConnectorHelper.GetAssociatedType(connectorType);
+
+                var port = InstantiatePort(Orientation.Horizontal, portDir, portCapacity, portType);
+                port.portName = connectorName;
+                port.userData = connectorType;
+                container.Add(port);
+                m_PortMap.Add(port, new PortTuple(outputPorts, i));
+                m_InversePortMap.Add(new PortTuple(outputPorts, i), port);
+
+                if (portConnections.TryGetValue(i, out Edge existingEdge))
+                {
+                    bool canConvert = false;
+                    Port inputPort = outputPorts ? existingEdge.input : port;
+                    Port outputPort = outputPorts ? port : existingEdge.output;
+                    canConvert = ConnectorHelper.CanConvert((ConnectorType)inputPort.userData, (ConnectorType)outputPort.userData);
+
+                    if ( canConvert )
+                    {
+                        existingEdge.input = inputPort;
+                        port.Connect(existingEdge);
+                        ProcGenGraphNodeView inputNodeView = (ProcGenGraphNodeView)inputPort.node;
+                        ProcGenGraphNodeView outputNodeView = (ProcGenGraphNodeView)outputPort.node;
+                        int inputIndex = inputNodeView.m_PortMap[inputPort].Item2;
+                        int outputIndex = outputNodeView.m_PortMap[outputPort].Item2;
+                        ref NodeInput nodeInput = ref inputNodeView.Node.Inputs[inputIndex];
+                        nodeInput.Connect(outputNodeView.Node, outputIndex);
+                        portConnections.Remove(i);
+                    }
+                }
+            }
+            foreach (var leftOver in portConnections)
+            {
+                Edge edge = leftOver.Value;
+                edge.input.Disconnect(edge);
+                edge.output.Disconnect(edge);
+                edge.parent.Remove(edge);
+            }
         }
 
         internal void SetOrigin(Vector2 newOrigin)
