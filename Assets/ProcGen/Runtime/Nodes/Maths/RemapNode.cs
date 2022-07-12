@@ -14,10 +14,10 @@ namespace ProcGen.Nodes.Maths
         public override void Initialize()
         {
             Inputs = this.CreateInputs(ConnectorType.SourceType, ConnectorType.Float, ConnectorType.Float, ConnectorType.Float, ConnectorType.Float);
-            Inputs[PrevMin].Initial.InitialValueFloat = 0f;
-            Inputs[PrevMax].Initial.InitialValueFloat = 1f;
-            Inputs[NewMin].Initial.InitialValueFloat = 0f;
-            Inputs[NewMax].Initial.InitialValueFloat = 1f;
+            Inputs[PrevMin].Initial.Float = 0f;
+            Inputs[PrevMax].Initial.Float = 1f;
+            Inputs[NewMin].Initial.Float = 0f;
+            Inputs[NewMax].Initial.Float = 1f;
             Outputs = this.CreateOutputs(ConnectorType.SourceType);
         }
         public override void Evaluate()

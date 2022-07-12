@@ -4,7 +4,7 @@ using ProcGen.Utils;
 namespace ProcGen.Nodes.Logic
 {
 
-    [ProceduralNode(2, "A", "B", "Condition")]
+    [ProceduralNode(strict: true, 2, "A", "B", "Condition")]
     public class CompareFloatNode : BaseNode
     {
         [ComparisonEnum]

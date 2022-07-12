@@ -76,6 +76,12 @@ namespace ProcGenEditor
             ToggleInspector();
         }
 
+        private void OnDisable()
+        {
+            if (m_Provider.GraphView != null)
+                m_Provider.GraphView.Unload();
+        }
+
         public void ResetGraph()
         {
             rootVisualElement.Q("graphRoot").Clear();
@@ -93,8 +99,13 @@ namespace ProcGenEditor
             graphView.NotifyElementInspect += ElementInspector.InspectElement;
             rootVisualElement.Q("graphRoot").RegisterCallback<KeyDownEvent>(OnKey);
 
+
+            if (m_Provider.GraphView != null)
+                m_Provider.GraphView.Unload();
+
             m_Provider.GraphView = graphView;
         }
+
 
         private void LoadGenerativeGraph(GenerativeGraphInstance graphInstance)
         {

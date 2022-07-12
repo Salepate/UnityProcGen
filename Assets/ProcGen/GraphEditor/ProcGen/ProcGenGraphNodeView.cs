@@ -18,8 +18,11 @@ namespace ProcGenEditor
         private static readonly string[] s_DefaultOutputNames = new string[1] { "Output" };
         public Vector2 Origin { get; private set; }
         public BaseNode Node { get; private set; }
+        public ProceduralNodeAttribute Attribute { get; private set; }
+
         public Group ParentGroup { get; set; }
 
+        private BaseNodeInspector m_Inspector;
         private Dictionary<Port, PortTuple> m_PortMap;
         private Dictionary<PortTuple, Port> m_InversePortMap;
 
@@ -49,18 +52,23 @@ namespace ProcGenEditor
             m_InversePortMap = new Dictionary<PortTuple, Port>();
         }
 
+        public void Free()
+        {
+            GameObject.DestroyImmediate(m_Inspector);
+            m_Inspector = null;
+        }
+
         public ProcGenGraphNodeView(BaseNode nodeData) : this()
         {
             Node = nodeData;
 
             this.Q<Label>("title-label").text = ProcGenEditorHelper.FormatNodeName(nodeData.GetType().Name);
 
-            InstantiatePorts(true);
-            InstantiatePorts(false);
-            BaseNodeInspector nodeEditor = (BaseNodeInspector) Editor.CreateEditor(nodeData);
-            nodeEditor.OnPortUpdate += OnPortUpdate;
+            m_Inspector = (BaseNodeInspector) Editor.CreateEditor(nodeData);
+            m_Inspector.OnPortUpdate += OnPortUpdate;
+            bool createContainer = m_Inspector.IsMainGUI;
             IMGUI = new IMGUIContainer();
-            IMGUI.userData = nodeEditor;
+            IMGUI.userData = m_Inspector;
             IMGUI.contextType = ContextType.Editor;
             IMGUI.onGUIHandler = () =>
             {
@@ -71,25 +79,44 @@ namespace ProcGenEditor
                     DataUpdate?.Invoke();
                 }
             };
-            extensionContainer.Add(IMGUI);
+
+            if (createContainer)
+            {
+                var parentContainer = inputContainer.parent;
+                var divider = new VisualElement() { name = "Divider" };
+                var guiContainer = new VisualElement() { name = "NodeMain" };
+                divider.AddToClassList("vertical");
+                parentContainer.Insert(1, divider);
+                parentContainer.Insert(2, guiContainer);
+
+                guiContainer.Add(IMGUI);
+            }
+            else
+            {
+                extensionContainer.Add(IMGUI);
+            }
+            InstantiatePorts(true);
+            InstantiatePorts(false);
             RefreshExpandedState();
         }
 
         public void OnPortUpdate()
         {
             Node.Initialize();
-            //InstantiatePorts(true);
+            InstantiatePorts(true);
             InstantiatePorts(false);
         }
 
         public void InstantiatePorts(bool outputPorts)
         {
+            bool hadPorts = m_PortMap.Count != 0;
             VisualElement container;
             System.Array arr;
             ProceduralNodeAttribute procNode = Node.GetType().GetCustomAttribute<ProceduralNodeAttribute>();
             string[] connectorNames;
             Direction portDir = Direction.Input;
             Port.Capacity portCapacity = Port.Capacity.Single;
+            Attribute = procNode;
 
             if (outputPorts)
             {
@@ -102,6 +129,8 @@ namespace ProcGenEditor
             else
             {
                 connectorNames = procNode != null ? procNode.InputNames : s_DefaultConnectorNames;
+                if (m_Inspector != null && m_Inspector.InputNamesOverride != null)
+                    connectorNames = m_Inspector.InputNamesOverride;
                 container = inputContainer;
                 arr = Node.Inputs;
 
@@ -179,6 +208,7 @@ namespace ProcGenEditor
                     }
                 }
             }
+
             foreach (var leftOver in portConnections)
             {
                 Edge edge = leftOver.Value;
@@ -186,6 +216,12 @@ namespace ProcGenEditor
                 edge.output.Disconnect(edge);
                 edge.parent.Remove(edge);
             }
+
+            if (!hadPorts && m_PortMap.Count > 0) // port isnt displayed if this is the very fast port creation
+            {
+                RefreshExpandedState();
+            }
+
         }
 
         internal void SetOrigin(Vector2 newOrigin)

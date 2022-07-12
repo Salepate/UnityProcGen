@@ -1,3 +1,4 @@
+using ProcGen.Buffer;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -11,7 +12,7 @@ namespace ProcGen.Connector
         public readonly ConnectorType ConnectorType;
         public BaseNode Source { get; private set; }
         public int SourceOutputIndex { get; private set; }
-        public ConnectorValue Initial;
+        public ValueBuffer Initial;
 
         private NodeOutput m_SourceOutput => Source.Outputs[SourceOutputIndex];
 
@@ -20,7 +21,7 @@ namespace ProcGen.Connector
             ConnectorType = cType;
             Source = null;
             SourceOutputIndex = -1;
-            Initial = new ConnectorValue();
+            Initial = new ValueBuffer();
         }
 
         public void Connect(BaseNode sourceNode, int outputIndex)
@@ -65,7 +66,7 @@ namespace ProcGen.Connector
             {
                 return ConnectorHelper.ConvertInt(m_SourceOutput);
             }
-            return Initial.InitialValueInt;
+            return Initial.Int;
         }
 
         public float ReadFloat()
@@ -74,7 +75,7 @@ namespace ProcGen.Connector
             {
                 return ConnectorHelper.ConvertFloat(m_SourceOutput);
             }
-            return Initial.InitialValueFloat;
+            return Initial.Float;
         }
         public Vector2 ReadVector2()
         {
@@ -82,7 +83,7 @@ namespace ProcGen.Connector
             {
                 return m_SourceOutput.Value.Vec2;
             }
-            return Initial.InitialValueVector2;
+            return Initial.Vec2;
         }
         public Vector3 ReadVector3()
         {
@@ -90,7 +91,7 @@ namespace ProcGen.Connector
             {
                 return m_SourceOutput.Value.Vec3;
             }
-            return Initial.InitialValueVector3;
+            return Initial.Vec3;
         }
     }
 }

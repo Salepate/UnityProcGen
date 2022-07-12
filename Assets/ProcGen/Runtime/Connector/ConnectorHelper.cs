@@ -1,3 +1,4 @@
+using ProcGen.Buffer;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -24,11 +25,12 @@ namespace ProcGen.Connector
                 outputs[i] = new NodeOutput(types[i]);
             return outputs;
         }
-
-        public static bool CanConvert(ConnectorType c1, ConnectorType c2)
+        public static bool CanConvert(ConnectorType c1, ConnectorType c2, bool strict = false)
         {
             if (c1 == c2)
                 return true;
+            else if (strict)
+                return false;
 
             if (c2 < c1)
             {

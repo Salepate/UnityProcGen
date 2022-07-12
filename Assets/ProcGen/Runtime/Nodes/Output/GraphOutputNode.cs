@@ -4,22 +4,24 @@ using System.Collections.Generic;
 
 namespace ProcGen.Nodes.Output
 {
-    [ProceduralNode(5, "In (1)", "In (2)", "In (3)", "In (4)", "In (5)")]
+    [ProceduralNode(strict:true, 5, "In (1)", "In (2)", "In (3)", "In (4)", "In (5)")]
     public class GraphOutputNode : BaseNode, IMasterNode
     {
-        public List<ConnectorType> BufferContent;
+        public List<ConnectorType> BufferLayout;
+        public List<string> LayoutNames;
 
         private GraphBuffer m_Buffer;
 
         public GraphOutputNode()
         {
-            BufferContent = new List<ConnectorType>();
+            BufferLayout = new List<ConnectorType>();
+            LayoutNames = new List<string>();
             Inputs = this.CreateInputs(0);
         }
 
         public override void Initialize()
         {
-            Inputs = this.CreateInputs(BufferContent.ToArray());
+            Inputs = this.CreateInputs(BufferLayout.ToArray());
         }
 
         public override void Evaluate()
@@ -36,7 +38,7 @@ namespace ProcGen.Nodes.Output
             return new MasterNodeSettings()
             {
                 HasBuffer = true,
-                BufferLayout = BufferContent
+                BufferLayout = BufferLayout
             };
         }
 

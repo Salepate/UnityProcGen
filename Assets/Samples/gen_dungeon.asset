@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
   m_Name: gen_dungeon
   m_EditorClassIdentifier: 
-  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.2,0.2]},{"BufferContent":[0,1]},{},{"Value":0.5},{"Value":0},{"Average":false},{"Value":1.0}]}'
+  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.2,0.2]},{"BufferLayout":[0,1],"LayoutNames":["IsTile","Scale"]},{"Value":0.5},{"Value":1.0},{"Comparison":2}]}'
   MasterNode: 5
   Reflection:
     Assemblies:
@@ -23,10 +23,8 @@ MonoBehaviour:
     - ProcGen.Nodes.TileMapNode
     - ProcGen.Nodes.Constants.Vector2Node
     - ProcGen.Nodes.Output.GraphOutputNode
-    - ProcGen.Nodes.Logic.StepNode
     - ProcGen.Nodes.Constants.FloatNode
-    - ProcGen.Nodes.Constants.IntNode
-    - ProcGen.Nodes.Maths.AddNode
+    - ProcGen.Nodes.Logic.CompareFloatNode
     NodeTypes:
     - AssemblyIndex: 0
       NameIndex: 0
@@ -41,11 +39,7 @@ MonoBehaviour:
     - AssemblyIndex: 0
       NameIndex: 5
     - AssemblyIndex: 0
-      NameIndex: 6
-    - AssemblyIndex: 0
-      NameIndex: 7
-    - AssemblyIndex: 0
-      NameIndex: 8
+      NameIndex: 5
     - AssemblyIndex: 0
       NameIndex: 6
   Connections:
@@ -66,27 +60,19 @@ MonoBehaviour:
     InputSlot: 1
     OutputSlot: 1
   - InputNode: 4
-    OutputNode: 8
+    OutputNode: 7
     InputSlot: 0
     OutputSlot: 0
   - InputNode: 4
-    OutputNode: 9
-    InputSlot: 1
-    OutputSlot: 0
-  - InputNode: 5
-    OutputNode: 0
-    InputSlot: 0
-    OutputSlot: 0
-  - InputNode: 5
     OutputNode: 6
     InputSlot: 1
     OutputSlot: 0
-  - InputNode: 8
-    OutputNode: 5
+  - InputNode: 7
+    OutputNode: 0
     InputSlot: 0
     OutputSlot: 0
-  - InputNode: 8
-    OutputNode: 7
+  - InputNode: 7
+    OutputNode: 5
     InputSlot: 1
     OutputSlot: 0
   Values:
@@ -95,8 +81,6 @@ MonoBehaviour:
     Value: {x: 0, y: 0, z: 0, w: 0}
   Meta:
     Groups:
-    - Title: Temporary Hack to convert to int
-      Color: {r: 0.6037736, g: 0.088287644, b: 0.088287644, a: 0.6392157}
     - Title: Tile Scale
       Color: {r: 0.32941177, g: 0.627451, b: 0.7647059, a: 0.27058825}
     - Title: Walkable
@@ -108,71 +92,57 @@ MonoBehaviour:
     Nodes:
     - Position:
         serializedVersion: 2
-        x: 474
-        y: -40
+        x: 501
+        y: -46
         width: 169
         height: 136
-      GroupIndex: 2
+      GroupIndex: 1
     - Position:
         serializedVersion: 2
         x: -40
         y: -43
         width: 135
         height: 112
-      GroupIndex: 3
+      GroupIndex: 2
     - Position:
         serializedVersion: 2
         x: -163
         y: -43
         width: 96
         height: 112
-      GroupIndex: 3
+      GroupIndex: 2
     - Position:
         serializedVersion: 2
         x: 168
         y: 108
         width: 223
         height: 126
-      GroupIndex: 2
+      GroupIndex: 1
     - Position:
         serializedVersion: 2
-        x: 1644
-        y: -13
-        width: 225
-        height: 202
-      GroupIndex: 4
-    - Position:
-        serializedVersion: 2
-        x: 697
-        y: 16
-        width: 157
-        height: 112
-      GroupIndex: 2
+        x: 1124
+        y: 3
+        width: 369
+        height: 111
+      GroupIndex: 3
     - Position:
         serializedVersion: 2
         x: 420
         y: 128
         width: 223
         height: 106
-      GroupIndex: 2
-    - Position:
-        serializedVersion: 2
-        x: 975
-        y: 107
-        width: 223
-        height: 106
-      GroupIndex: 0
-    - Position:
-        serializedVersion: 2
-        x: 1225
-        y: -23
-        width: 187
-        height: 130
-      GroupIndex: 0
-    - Position:
-        serializedVersion: 2
-        x: 1206
-        y: 352
-        width: 223
-        height: 106
       GroupIndex: 1
+    - Position:
+        serializedVersion: 2
+        x: 877
+        y: 262
+        width: 223
+        height: 106
+      GroupIndex: 0
+    - Position:
+        serializedVersion: 2
+        x: 804
+        y: 3
+        width: 223
+        height: 130
+      GroupIndex: -1

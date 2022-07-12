@@ -76,13 +76,14 @@ namespace ProcGen
                 ref NodeConnection connection = ref Connections[i];
                 BaseNode outputNode = graph.Nodes[connection.OutputNode];
                 BaseNode inputNode = graph.Nodes[connection.InputNode];
-                inputNode.Inputs[connection.InputSlot].Connect(outputNode, connection.OutputSlot);
+                if ( connection.InputSlot < inputNode.Inputs.Length)
+                    inputNode.Inputs[connection.InputSlot].Connect(outputNode, connection.OutputSlot);
             }
             for (int i = 0; i < Values.Length; ++i)
             {
                 ref InputDefaultValue defValue = ref Values[i];
                 BaseNode node = graph.Nodes[defValue.Node];
-                node.Inputs[defValue.Slot].Initial.InitialValueVector4 = defValue.Value;
+                node.Inputs[defValue.Slot].Initial.Vec4 = defValue.Value;
 
             }
             return graph;
@@ -103,7 +104,7 @@ namespace ProcGen
                 else
                 {
                     // add default value?
-                    values.Add(new InputDefaultValue(nodeIndex, i, input.Initial.InitialValueVector4));
+                    values.Add(new InputDefaultValue(nodeIndex, i, input.Initial.Vec4));
                 }
             }
         }

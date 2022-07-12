@@ -27,15 +27,27 @@ namespace ProcGenEditor
             graphViewChanged += OnGraphViewChanged;
         }
 
+        public void Unload()
+        {
+            nodes.ForEach(node =>
+            {
+                ((ProcGenGraphNodeView) node).Free();
+            });
+        }
+
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
             List<Port> listPort = new List<Port>();
+            ProcGenGraphNodeView startNodeView = (ProcGenGraphNodeView)startPort.node;
+            bool isStrict = startNodeView.Attribute.StrictConnections;
 
             ports.ForEach(p =>
             {
+                ProcGenGraphNodeView otherNodeView = (ProcGenGraphNodeView)p.node;
+
                 if ( p.orientation == startPort.orientation 
                     && p.direction != startPort.direction
-                    && ConnectorHelper.CanConvert((ConnectorType)startPort.userData, (ConnectorType)p.userData))
+                    && ConnectorHelper.CanConvert((ConnectorType)startPort.userData, (ConnectorType)p.userData, isStrict || otherNodeView.Attribute.StrictConnections))
                 {
 
                     listPort.Add(p);
@@ -76,6 +88,7 @@ namespace ProcGenEditor
                     var elem = changes.elementsToRemove[i];
                     if ( elem is ProcGenGraphNodeView nodeView)
                     {
+                        nodeView.Free();
                         int idx = nodeView.Node.NodeIndex;
                         ArrayUtility.Remove(ref GraphInstance.Runtime.Nodes, nodeView.Node);
                         // reupdate all node ids above
