@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
   m_Name: gen_terrain
   m_EditorClassIdentifier: 
-  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.1,0.03]},{"DesiredOutput":1},{"Value":13.3},{"Average":false},{"DesiredOutput":0},{"Value":10.0},{"ManualTimeUpdate":true},{"BufferLayout":[1],"LayoutNames":["Height"]}]}'
+  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.1,0.03]},{},{"Value":13.3},{"Average":false},{},{"Value":10.0},{"ManualTimeUpdate":true},{"BufferLayout":[1],"LayoutNames":["Height"]}]}'
   MasterNode: 11
   Reflection:
     Assemblies:
@@ -132,22 +132,22 @@ MonoBehaviour:
         serializedVersion: 2
         x: -85
         y: 86
-        width: 223
-        height: 126
+        width: 175
+        height: 77
       GroupIndex: -1
     - Position:
         serializedVersion: 2
         x: 523
         y: 12
-        width: 213
-        height: 120
+        width: 123
+        height: 112
       GroupIndex: -1
     - Position:
         serializedVersion: 2
         x: 232
         y: 112
-        width: 223
-        height: 106
+        width: 137
+        height: 77
       GroupIndex: -1
     - Position:
         serializedVersion: 2
@@ -160,15 +160,15 @@ MonoBehaviour:
         serializedVersion: 2
         x: -344
         y: -209
-        width: 213
-        height: 120
+        width: 123
+        height: 112
       GroupIndex: -1
     - Position:
         serializedVersion: 2
         x: -652
         y: -97
-        width: 223
-        height: 106
+        width: 137
+        height: 77
       GroupIndex: -1
     - Position:
         serializedVersion: 2
@@ -179,8 +179,8 @@ MonoBehaviour:
       GroupIndex: 0
     - Position:
         serializedVersion: 2
-        x: 850
-        y: 22
-        width: 376
+        x: 867
+        y: 29
+        width: 375
         height: 87
       GroupIndex: 1
