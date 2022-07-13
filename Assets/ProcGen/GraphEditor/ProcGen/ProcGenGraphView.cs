@@ -1,6 +1,7 @@
 using ProcGen;
 using ProcGen.Connector;
 using ProcGen.Model;
+using ProcGenEditor.GraphElems;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -184,7 +185,7 @@ namespace ProcGenEditor
 
         public Group CreateGroup(string label)
         {
-            Group group = new Group();
+            Group group = new ProcGenGroup();
             group.title = label;
             group.AddManipulator(new ContextualMenuManipulator(BuildGroupContextualMenu));
             group.style.opacity = 1f;
