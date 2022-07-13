@@ -58,12 +58,12 @@ namespace ProcGen.Buffer
 
         public int ReadValueInt(int index)
         {
-            return System.BitConverter.ToInt32(m_Block, GetElementOffset(index));
+            return BitConverter.ToInt32(m_Block, GetElementOffset(index));
         }
 
         public float ReadValueFloat(int index)
         {
-            return System.BitConverter.ToSingle(m_Block, GetElementOffset(index));
+            return BitConverter.ToSingle(m_Block, GetElementOffset(index));
         }
 
         public Vector3 ReadValueV3(int index)
@@ -71,9 +71,9 @@ namespace ProcGen.Buffer
             int off = GetElementOffset(index);
             return new Vector3()
             {
-                x = GetElementOffset(index),
-                y = GetElementOffset(index + 4),
-                z = GetElementOffset(index + 8)
+                x = BitConverter.ToSingle(m_Block, off),
+                y = BitConverter.ToSingle(m_Block, off + 4),
+                z = BitConverter.ToSingle(m_Block, off + 8)
             };
         }
 
