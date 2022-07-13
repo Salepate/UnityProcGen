@@ -55,6 +55,7 @@ namespace ProcGenEditor
         public void Free()
         {
             GameObject.DestroyImmediate(m_Inspector);
+            IMGUI.onGUIHandler = null;
             m_Inspector = null;
         }
 

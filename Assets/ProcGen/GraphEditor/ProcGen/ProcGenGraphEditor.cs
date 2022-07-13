@@ -74,10 +74,27 @@ namespace ProcGenEditor
             toolbar.Q<Button>("button-inspector").clicked += ToggleInspector;
             ElementInspector = new ProcGenGraphElementInspector(rootVisualElement.Q("graphInspector"));
             ToggleInspector();
+
+            if ( Application.isPlaying )
+            {
+                EditorApplication.playModeStateChanged += OnPlayStateChanged;
+            }
         }
 
+        private void OnPlayStateChanged(PlayModeStateChange stateChange)
+        {
+            if ( stateChange == PlayModeStateChange.ExitingPlayMode )
+            {
+                if (m_Provider.GraphView != null)
+                {
+                    m_Provider.GraphView.Unload();
+                    ResetGraph();
+                }
+            }
+        }
         private void OnDisable()
         {
+            EditorApplication.playModeStateChanged -= OnPlayStateChanged;
             if (m_Provider.GraphView != null)
                 m_Provider.GraphView.Unload();
         }
