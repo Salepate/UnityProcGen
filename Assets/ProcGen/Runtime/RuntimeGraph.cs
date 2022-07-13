@@ -1,4 +1,5 @@
 ﻿using ProcGen.Connector;
+using ProcGen.Utils;
 using System.Collections.Generic;
 
 namespace ProcGen
@@ -10,12 +11,22 @@ namespace ProcGen
     {
         public BaseNode[] Nodes = new BaseNode[0];
 
-        private List<int> m_EvaluationStack; 
+        public BaseNode TargetNode { get; private set; }
+
+        private IList<int> m_SortedEvaluationTree; 
 
         internal RuntimeGraph()
         {
-            m_EvaluationStack = new List<int>();
+            m_SortedEvaluationTree = new List<int>();
         }
+
+
+        public void Compute()
+        {
+            InternalEvaluate();
+        }
+
+        /// Legacy
 
         /// <summary>
         /// Fetch an instanciated node by type
@@ -34,36 +45,14 @@ namespace ProcGen
             return null;
         }
 
-        /// <summary>
-        /// Evaluates a specific node from the graph and its subtree
-        /// </summary>
-        /// <param name="nodeIndex">node index in array</param>
-        public void EvaluateNode(int nodeIndex)
+        internal void Initialize(int mainNodeIndex)
         {
-            if (m_EvaluationStack.Count > 0)
-                throw new System.Exception("Graph failed to evaluate properly");
+            //m_EvaluationStack.Capacity = Nodes.Length;
 
-            InternalEvaluate(nodeIndex);
-        }
-        /// <summary>
-        /// Evaluates a referenced node from the graph and its subtree
-        /// throws an exception if the node is not included in the graph.
-        /// </summary>
-        /// <param name="node">node reference belonging to the graph</param>
-        public void EvaluateNode(BaseNode node)
-        {
-            if (node.NodeIndex == -1 || System.Array.IndexOf(Nodes, node) == -1)
-                throw new System.Exception($"Node {node.GetType().Name} does not belong to current graph");
-
-            if (m_EvaluationStack.Count > 0)
-                throw new System.Exception("Graph failed to evaluate properly");
-
-            InternalEvaluate(node.NodeIndex);
-        }
-
-        internal void Initialize()
-        {
-            m_EvaluationStack.Capacity = Nodes.Length;
+            if (mainNodeIndex != -1 && Nodes[mainNodeIndex] is IMasterNode )
+            {
+                TargetNode = Nodes[mainNodeIndex];
+            }
 
             for (int i = 0; i < Nodes.Length; ++i)
             {
@@ -72,37 +61,22 @@ namespace ProcGen
             }
         }
 
-        private void InternalEvaluate(int targetNode)
+        internal void ComputeExecutionTree()
         {
-            int offset = 0;
-            m_EvaluationStack.Add(targetNode);
+            m_SortedEvaluationTree = GraphTree.ComputeExecutionTree(Nodes, TargetNode.NodeIndex);
+        }
 
-            // breadthfirst traversal
-            do
+        public void SetMasterNode(BaseNode node)
+        {
+            TargetNode = node;
+        }
+
+        private void InternalEvaluate()
+        {
+            for(int i = 0; i < m_SortedEvaluationTree.Count; ++i)
             {
-                int nodeIndex = m_EvaluationStack[offset];
-                BaseNode currentNode = Nodes[nodeIndex];
-
-                for (int i = 0; i < currentNode.Inputs.Length; ++i)
-                {
-                    ref NodeInput connector = ref currentNode.Inputs[i];
-                    BaseNode sourceNode = connector.Source;
-
-                    if ( connector.IsConnectorValid() && !m_EvaluationStack.Contains(sourceNode.NodeIndex))
-                    {
-                        m_EvaluationStack.Add(sourceNode.NodeIndex);
-                    }
-                }
-
-            } while (++offset < m_EvaluationStack.Count);
-
-            // stack pop
-            for(int i = m_EvaluationStack.Count - 1; i >= 0; --i)
-            {
-                int nodeIndex = m_EvaluationStack[i];
-                Nodes[nodeIndex].Evaluate();
+                Nodes[m_SortedEvaluationTree[i]].Evaluate();
             }
-            m_EvaluationStack.Clear();
         }
     }
 }

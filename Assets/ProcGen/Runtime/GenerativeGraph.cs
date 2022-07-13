@@ -16,6 +16,7 @@ namespace ProcGen
     public class GenerativeGraph : ScriptableObject
     {
         public string SerializedGraph = "{}";                   // Store polymorphic data (without actual types)
+        public int MasterNode; // NodeIndex - 1
         public GraphReflection Reflection = GraphReflection.Empty; // store reflection data
         [SerializeField]  internal NodeConnection[] Connections = new NodeConnection[0]; // Store connection (out->in) between nodes
         [SerializeField]  internal InputDefaultValue[] Values = new InputDefaultValue[0]; // Store default value when an input has no output connected to it // TODO: Expose values in editor
@@ -31,19 +32,31 @@ namespace ProcGen
         {
             List<NodeConnection> connections = new List<NodeConnection>();
             List<InputDefaultValue> values = new List<InputDefaultValue>();
-            List<NodeMetadata> meta = new List<NodeMetadata>();
 
-            // nodes, edges, editor meta
-            SerializedGraph = JsonConvert.SerializeObject(graph, settings);
-            Reflection = GraphReflection.FromArray(graph.Nodes);
             for (int i = 0; i < graph.Nodes.Length; ++i)
             {
                 BaseNode node = graph.Nodes[i];
                 AddNodeConnections(graph.Nodes, node, connections, values);
             }
 
+            // nodes, edges, editor meta
+            SerializedGraph = JsonConvert.SerializeObject(graph, settings);
+            Reflection = GraphReflection.FromArray(graph.Nodes);
             Connections = connections.ToArray();
             Values = values.ToArray();
+
+
+
+            int masterNodexIndex = -1;
+            if (graph.TargetNode != null)
+                masterNodexIndex = System.Array.IndexOf(graph.Nodes, graph.TargetNode);
+
+            if (masterNodexIndex == -1)
+            {
+                UnityEngine.Debug.LogError("No master node found");
+            }
+
+            MasterNode = masterNodexIndex + 1; // treat 0 as error
         }
 
         /// <summary>
@@ -57,21 +70,23 @@ namespace ProcGen
         {
             nodeConverter.SetGraphReflection(Reflection);
             RuntimeGraph graph = JsonConvert.DeserializeObject<RuntimeGraph>(SerializedGraph, settings);
-            graph.Initialize();
+            graph.Initialize(MasterNode - 1);
             for (int i = 0; i < Connections.Length; ++i)
             {
                 ref NodeConnection connection = ref Connections[i];
                 BaseNode outputNode = graph.Nodes[connection.OutputNode];
                 BaseNode inputNode = graph.Nodes[connection.InputNode];
-                inputNode.Inputs[connection.InputSlot].Connect(outputNode, connection.OutputSlot);
+                if ( connection.InputSlot < inputNode.Inputs.Length)
+                    inputNode.Inputs[connection.InputSlot].Connect(outputNode, connection.OutputSlot);
             }
             for (int i = 0; i < Values.Length; ++i)
             {
                 ref InputDefaultValue defValue = ref Values[i];
                 BaseNode node = graph.Nodes[defValue.Node];
-                node.Inputs[defValue.Slot].Initial.InitialValueVector4 = defValue.Value;
+                node.Inputs[defValue.Slot].Initial.Vec4 = defValue.Value;
 
             }
+            graph.ComputeExecutionTree();
             return graph;
         }
 
@@ -90,7 +105,7 @@ namespace ProcGen
                 else
                 {
                     // add default value?
-                    values.Add(new InputDefaultValue(nodeIndex, i, input.Initial.InitialValueVector4));
+                    values.Add(new InputDefaultValue(nodeIndex, i, input.Initial.Vec4));
                 }
             }
         }

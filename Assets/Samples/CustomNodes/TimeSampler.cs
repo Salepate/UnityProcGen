@@ -24,9 +24,9 @@ namespace ProcGenSamples
         {
             if (!ManualTimeUpdate)
                 CacheTimeValue();
-            Outputs[Time].ValueFloat = m_Elapsed;
-            Outputs[Delta].ValueFloat = UnityEngine.Time.deltaTime;
-            Outputs[SineTime].ValueFloat = m_SineCache;
+            Outputs[Time].Value.Float = m_Elapsed;
+            Outputs[Delta].Value.Float = UnityEngine.Time.deltaTime;
+            Outputs[SineTime].Value.Float = m_SineCache;
         }
 
         public void CacheTimeValue()

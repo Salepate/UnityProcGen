@@ -17,6 +17,9 @@ namespace ProcGenEditor
         public System.Action NotifyGraphUpdate;
         public System.Action<GraphElement> NotifyElementInspect;
         public GenerativeGraphInstance GraphInstance { get; set; }
+
+        public ProcGenGraphNodeView CurrentMasterNode { get; set; }
+
         public ProcGenGraphView()
         {
             GridBackground gridBg = new GridBackground();
@@ -24,15 +27,27 @@ namespace ProcGenEditor
             graphViewChanged += OnGraphViewChanged;
         }
 
+        public void Unload()
+        {
+            nodes.ForEach(node =>
+            {
+                ((ProcGenGraphNodeView) node).Free();
+            });
+        }
+
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
             List<Port> listPort = new List<Port>();
+            ProcGenGraphNodeView startNodeView = (ProcGenGraphNodeView)startPort.node;
+            bool isStrict = startNodeView.Attribute.StrictConnections;
 
             ports.ForEach(p =>
             {
+                ProcGenGraphNodeView otherNodeView = (ProcGenGraphNodeView)p.node;
+
                 if ( p.orientation == startPort.orientation 
                     && p.direction != startPort.direction
-                    && ConnectorHelper.CanConvert((ConnectorType)startPort.userData, (ConnectorType)p.userData))
+                    && ConnectorHelper.CanConvert((ConnectorType)startPort.userData, (ConnectorType)p.userData, isStrict || otherNodeView.Attribute.StrictConnections))
                 {
 
                     listPort.Add(p);
@@ -73,6 +88,7 @@ namespace ProcGenEditor
                     var elem = changes.elementsToRemove[i];
                     if ( elem is ProcGenGraphNodeView nodeView)
                     {
+                        nodeView.Free();
                         int idx = nodeView.Node.NodeIndex;
                         ArrayUtility.Remove(ref GraphInstance.Runtime.Nodes, nodeView.Node);
                         // reupdate all node ids above
@@ -84,8 +100,11 @@ namespace ProcGenEditor
                     if ( elem is Edge edge )
                     {
                         ProcGenGraphNodeView inputNode = (ProcGenGraphNodeView) edge.input.node;
-                        inputNode.TryGetPortData(edge.input, out int edgeSlot, out _);
-                        inputNode.Node.Inputs[edgeSlot].Connect(null, 0);
+                        if ( inputNode != null)
+                        {
+                            inputNode.TryGetPortData(edge.input, out int edgeSlot, out _);
+                            inputNode.Node.Inputs[edgeSlot].Connect(null, 0);
+                        }
                         refreshGraph = true;
                     }
                 }
@@ -104,7 +123,6 @@ namespace ProcGenEditor
             if (selectable is GraphElement graphElem)
                 NotifyElementInspect?.Invoke(graphElem);
         }
-
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             if ( selection.Count > 0 )
@@ -121,6 +139,21 @@ namespace ProcGenEditor
                         }
                     }
                 });
+
+                if ( selection.Count == 1 && selection[0] is ProcGenGraphNodeView nodeView)
+                {
+                    if ( nodeView.Node is IMasterNode masterNode)
+                    {
+                        evt.menu.AppendAction("Set Master", (a) =>
+                        {
+                            if (CurrentMasterNode != null)
+                                CurrentMasterNode.RemoveFromClassList("masterNode");
+                            nodeView.AddToClassList("masterNode");
+                            GraphInstance.Runtime.SetMasterNode(nodeView.Node);
+                            CurrentMasterNode = nodeView;
+                        });
+                    }
+                }
             }
         }
         private void BuildGroupContextualMenu(ContextualMenuPopulateEvent evt)

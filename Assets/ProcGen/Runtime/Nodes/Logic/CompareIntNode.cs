@@ -4,7 +4,7 @@ using ProcGen.Utils;
 namespace ProcGen.Nodes.Logic
 {
 
-    [ProceduralNode(2, "A", "B", "Condition")]
+    [ProceduralNode(strict: true, 2, "A", "B", "Condition")]
     public class CompareIntNode : BaseNode
     {
         [ComparisonEnum]
@@ -35,7 +35,7 @@ namespace ProcGen.Nodes.Logic
 
         public void AssignOutput(bool fillCondition)
         {
-            Outputs[0].ValueInt = fillCondition ? 1 : 0;
+            Outputs[0].Value.Int = fillCondition ? 1 : 0;
         }
     }
 

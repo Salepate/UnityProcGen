@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
   m_Name: gen_terrain
   m_EditorClassIdentifier: 
-  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.1,0.03]},{},{"Value":13.3},{"Average":false},{},{"Value":10.0},{},{"ManualTimeUpdate":false}]}'
+  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.1,0.03]},{},{"Value":13.3},{"Average":false},{},{"Value":10.0},{"ManualTimeUpdate":true},{"BufferLayout":[1],"LayoutNames":["Height"]}]}'
+  MasterNode: 11
   Reflection:
     Assemblies:
     - ProcGen.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -25,8 +26,8 @@ MonoBehaviour:
     - ProcGen.Nodes.Maths.MultiplyNode
     - ProcGen.Nodes.Constants.FloatNode
     - ProcGen.Nodes.Maths.AddNode
-    - ProcGenSamples.HeightMapNode
     - ProcGenSamples.TimeSampler
+    - ProcGen.Nodes.Output.GraphOutputNode
     NodeTypes:
     - AssemblyIndex: 0
       NameIndex: 0
@@ -48,7 +49,7 @@ MonoBehaviour:
       NameIndex: 5
     - AssemblyIndex: 1
       NameIndex: 7
-    - AssemblyIndex: 1
+    - AssemblyIndex: 0
       NameIndex: 8
   Connections:
   - InputNode: 0
@@ -84,14 +85,14 @@ MonoBehaviour:
     InputSlot: 1
     OutputSlot: 0
   - InputNode: 7
-    OutputNode: 10
+    OutputNode: 9
     InputSlot: 0
     OutputSlot: 0
   - InputNode: 7
     OutputNode: 8
     InputSlot: 1
     OutputSlot: 0
-  - InputNode: 9
+  - InputNode: 10
     OutputNode: 4
     InputSlot: 0
     OutputSlot: 0
@@ -103,8 +104,8 @@ MonoBehaviour:
     Groups:
     - Title: Inputs
       Color: {r: 0.23028658, g: 0.3542844, b: 0.4245283, a: 0.5372549}
-    - Title: Outputs
-      Color: {r: 0.1981577, g: 0.5754717, b: 0.3685576, a: 0.48235294}
+    - Title: Output
+      Color: {r: 0.15477037, g: 0.6981132, b: 0.21686669, a: 0.34117648}
     Nodes:
     - Position:
         serializedVersion: 2
@@ -115,8 +116,8 @@ MonoBehaviour:
       GroupIndex: -1
     - Position:
         serializedVersion: 2
-        x: -319
-        y: 9
+        x: -344
+        y: 37
         width: 135
         height: 112
       GroupIndex: -1
@@ -131,13 +132,13 @@ MonoBehaviour:
         serializedVersion: 2
         x: -85
         y: 86
-        width: 223
-        height: 126
+        width: 175
+        height: 77
       GroupIndex: -1
     - Position:
         serializedVersion: 2
         x: 523
-        y: 16
+        y: 12
         width: 123
         height: 112
       GroupIndex: -1
@@ -145,8 +146,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: 232
         y: 112
-        width: 223
-        height: 106
+        width: 137
+        height: 77
       GroupIndex: -1
     - Position:
         serializedVersion: 2
@@ -166,20 +167,20 @@ MonoBehaviour:
         serializedVersion: 2
         x: -652
         y: -97
-        width: 223
-        height: 106
+        width: 137
+        height: 77
       GroupIndex: -1
     - Position:
         serializedVersion: 2
-        x: 748
-        y: 11
-        width: 112
-        height: 88
-      GroupIndex: 1
-    - Position:
-        serializedVersion: 2
-        x: -963
-        y: -174
+        x: -950
+        y: -209
         width: 187
         height: 154
       GroupIndex: 0
+    - Position:
+        serializedVersion: 2
+        x: 867
+        y: 29
+        width: 375
+        height: 87
+      GroupIndex: 1

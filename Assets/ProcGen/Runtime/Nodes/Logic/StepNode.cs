@@ -17,9 +17,9 @@ namespace ProcGen.Nodes.Logic
         public override void Evaluate()
         {
             if (Inputs[Input].ReadFloat() >= Inputs[Threshold].ReadFloat())
-                Outputs[0].ValueFloat = 1f;
+                Outputs[0].Value.Write(1f);
             else
-                Outputs[0].ValueFloat = 0f;
+                Outputs[0].Value.Write(0f);
         }
     }
 }

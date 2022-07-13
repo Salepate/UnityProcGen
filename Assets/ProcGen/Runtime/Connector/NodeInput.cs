@@ -1,4 +1,7 @@
+using ProcGen.Buffer;
+using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace ProcGen.Connector
@@ -9,7 +12,7 @@ namespace ProcGen.Connector
         public readonly ConnectorType ConnectorType;
         public BaseNode Source { get; private set; }
         public int SourceOutputIndex { get; private set; }
-        public ConnectorValue Initial;
+        public ValueBuffer Initial;
 
         private NodeOutput m_SourceOutput => Source.Outputs[SourceOutputIndex];
 
@@ -18,7 +21,7 @@ namespace ProcGen.Connector
             ConnectorType = cType;
             Source = null;
             SourceOutputIndex = -1;
-            Initial = new ConnectorValue();
+            Initial = new ValueBuffer();
         }
 
         public void Connect(BaseNode sourceNode, int outputIndex)
@@ -45,14 +48,25 @@ namespace ProcGen.Connector
             return false;
         }
 
-
+        public bool ReadBytesInto(IntPtr addrPointer, bool deleteData, byte[] destination, int offset)
+        {
+            int size = ConnectorHelper.GetDataSize(ConnectorType);
+            // naive
+            if ( IsConnectorValid())
+            {
+                Marshal.StructureToPtr(m_SourceOutput.Value, addrPointer, deleteData);
+                Marshal.Copy(addrPointer, destination, offset, size);
+                return true;
+            }
+            return false;
+        }
         public int ReadInteger()
         {
             if (IsConnectorValid())
             {
                 return ConnectorHelper.ConvertInt(m_SourceOutput);
             }
-            return Initial.InitialValueInt;
+            return Initial.Int;
         }
 
         public float ReadFloat()
@@ -61,23 +75,23 @@ namespace ProcGen.Connector
             {
                 return ConnectorHelper.ConvertFloat(m_SourceOutput);
             }
-            return Initial.InitialValueFloat;
+            return Initial.Float;
         }
         public Vector2 ReadVector2()
         {
             if (IsConnectorValid())
             {
-                return m_SourceOutput.ValueVector2;
+                return m_SourceOutput.Value.Vec2;
             }
-            return Initial.InitialValueVector2;
+            return Initial.Vec2;
         }
         public Vector3 ReadVector3()
         {
             if (IsConnectorValid())
             {
-                return m_SourceOutput.ValueVector3;
+                return m_SourceOutput.Value.Vec3;
             }
-            return Initial.InitialValueVector3;
+            return Initial.Vec3;
         }
     }
 }

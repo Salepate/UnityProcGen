@@ -18,5 +18,25 @@
 }
 
 #extension {
-    background-color: rgba(77, 77, 77, 255);
+    background-color: rgb(77, 77, 77);
+}
+
+.masterNode > #node-border {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(137, 76, 190);
+    border-right-color: rgb(137, 76, 190);
+    border-top-color: rgb(137, 76, 190);
+    border-bottom-color: rgb(137, 76, 190);
+}
+
+#NodeMain {
+    background-color: rgba(72, 72, 72, 0.9);
+    justify-content: center;
+}
+
+.graphElement #title {
+    background-color: rgb(72, 72, 72);
 }

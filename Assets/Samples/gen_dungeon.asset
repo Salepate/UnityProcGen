@@ -12,17 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b27a8722339e47b8dba6491bca761, type: 3}
   m_Name: gen_dungeon
   m_EditorClassIdentifier: 
-  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.2,0.2]},{"Threshold":0.5}]}'
+  SerializedGraph: '{"Nodes":[{},{},{},{"Value":[0.2,0.2]},{"BufferLayout":[0,1],"LayoutNames":["IsTile","Scale"]},{"Value":0.5},{"Value":1.0},{"Comparison":2}]}'
+  MasterNode: 5
   Reflection:
     Assemblies:
     - ProcGen.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    - Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Types:
     - ProcGen.Nodes.UnityPerlinNode
     - ProcGen.Nodes.Composites.CreateVector2Node
     - ProcGen.Nodes.TileMapNode
     - ProcGen.Nodes.Constants.Vector2Node
-    - ProcGenSamples.DungeonTileNode
+    - ProcGen.Nodes.Output.GraphOutputNode
+    - ProcGen.Nodes.Constants.FloatNode
+    - ProcGen.Nodes.Logic.CompareFloatNode
     NodeTypes:
     - AssemblyIndex: 0
       NameIndex: 0
@@ -32,8 +34,14 @@ MonoBehaviour:
       NameIndex: 2
     - AssemblyIndex: 0
       NameIndex: 3
-    - AssemblyIndex: 1
+    - AssemblyIndex: 0
       NameIndex: 4
+    - AssemblyIndex: 0
+      NameIndex: 5
+    - AssemblyIndex: 0
+      NameIndex: 5
+    - AssemblyIndex: 0
+      NameIndex: 6
   Connections:
   - InputNode: 0
     OutputNode: 1
@@ -52,48 +60,89 @@ MonoBehaviour:
     InputSlot: 1
     OutputSlot: 1
   - InputNode: 4
+    OutputNode: 7
+    InputSlot: 0
+    OutputSlot: 0
+  - InputNode: 4
+    OutputNode: 6
+    InputSlot: 1
+    OutputSlot: 0
+  - InputNode: 7
     OutputNode: 0
     InputSlot: 0
+    OutputSlot: 0
+  - InputNode: 7
+    OutputNode: 5
+    InputSlot: 1
     OutputSlot: 0
   Values:
   - Node: 0
     Slot: 2
     Value: {x: 0, y: 0, z: 0, w: 0}
   Meta:
-    Groups: []
+    Groups:
+    - Title: Tile Scale
+      Color: {r: 0.32941177, g: 0.627451, b: 0.7647059, a: 0.27058825}
+    - Title: Walkable
+      Color: {r: 0.3280082, g: 0.62681466, b: 0.764151, a: 0.28235295}
+    - Title: Inputs (temporary)
+      Color: {r: 0.5176471, g: 0.31764707, b: 0.32323512, a: 0.44705883}
+    - Title: Output Buffer
+      Color: {r: 0.09718762, g: 0.5283019, b: 0.17016092, a: 0.3529412}
     Nodes:
     - Position:
         serializedVersion: 2
-        x: 220
-        y: 37
+        x: 501
+        y: -46
         width: 169
         height: 136
-      GroupIndex: -1
+      GroupIndex: 1
     - Position:
         serializedVersion: 2
-        x: 26
-        y: 37
+        x: -40
+        y: -43
         width: 135
         height: 112
-      GroupIndex: -1
+      GroupIndex: 2
     - Position:
         serializedVersion: 2
-        x: -253
-        y: 37
+        x: -163
+        y: -43
         width: 96
         height: 112
-      GroupIndex: -1
+      GroupIndex: 2
     - Position:
         serializedVersion: 2
-        x: -62
-        y: 224
+        x: 168
+        y: 108
         width: 223
         height: 126
-      GroupIndex: -1
+      GroupIndex: 1
     - Position:
         serializedVersion: 2
-        x: 455
-        y: 37
+        x: 1124
+        y: 3
+        width: 369
+        height: 111
+      GroupIndex: 3
+    - Position:
+        serializedVersion: 2
+        x: 420
+        y: 128
         width: 223
         height: 106
+      GroupIndex: 1
+    - Position:
+        serializedVersion: 2
+        x: 877
+        y: 262
+        width: 223
+        height: 106
+      GroupIndex: 0
+    - Position:
+        serializedVersion: 2
+        x: 804
+        y: 3
+        width: 223
+        height: 130
       GroupIndex: -1

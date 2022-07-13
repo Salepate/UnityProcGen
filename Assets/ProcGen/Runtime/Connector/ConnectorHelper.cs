@@ -1,3 +1,5 @@
+using ProcGen.Buffer;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace ProcGen.Connector
@@ -23,11 +25,12 @@ namespace ProcGen.Connector
                 outputs[i] = new NodeOutput(types[i]);
             return outputs;
         }
-
-        public static bool CanConvert(ConnectorType c1, ConnectorType c2)
+        public static bool CanConvert(ConnectorType c1, ConnectorType c2, bool strict = false)
         {
             if (c1 == c2)
                 return true;
+            else if (strict)
+                return false;
 
             if (c2 < c1)
             {
@@ -60,17 +63,36 @@ namespace ProcGen.Connector
             return typeof(object);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int GetDataSize(ConnectorType connectorType)
+        {
+            const int compSize = 4;
+            switch (connectorType)
+            {
+                default:
+                case ConnectorType.Integer:
+                case ConnectorType.Float:
+                    return compSize;
+                case ConnectorType.Vector2:
+                    return compSize * 2;
+                case ConnectorType.Vector3:
+                    return compSize * 3;
+                case ConnectorType.SourceType:
+                    return compSize * 4;
+            }
+        }
+
         internal static int ConvertInt(NodeOutput sourceOutput)
         {
             if (sourceOutput.ConnectorType == ConnectorType.Float)
-                return (int)sourceOutput.ValueFloat;
-            return sourceOutput.ValueInt;
+                return (int)sourceOutput.Value.Float;
+            return sourceOutput.Value.Int;
         }
         internal static float ConvertFloat(NodeOutput sourceOutput)
         {
             if (sourceOutput.ConnectorType == ConnectorType.Integer)
-                return sourceOutput.ValueInt;
-            return sourceOutput.ValueFloat;
+                return sourceOutput.Value.Int;
+            return sourceOutput.Value.Float;
         }
     }
 }

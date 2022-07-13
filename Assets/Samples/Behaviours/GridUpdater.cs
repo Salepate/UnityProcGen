@@ -24,10 +24,15 @@ public class GridUpdater : MonoBehaviour
         Graph.OnGraphUpdate += OnGraphChange;
     }
 
-    private void Start()
+    private void OnEnable()
     {
         Graph.GenerateRuntime();
         OnGraphChange();
+    }
+
+    private void OnDisable()
+    {
+        Graph.Clear();
     }
 
     private void Update()
@@ -47,7 +52,6 @@ public class GridUpdater : MonoBehaviour
 
     private void UpdateGrid()
     {
-        var heightmap = Graph.Runtime.Query<HeightMapNode>();
         var tilemap = Graph.Runtime.Query<TileMapNode>();
 
         for (int i = 0; i < TileCount; ++i)
@@ -55,8 +59,8 @@ public class GridUpdater : MonoBehaviour
             int y = i % GridSize;
             int x = i / GridSize;
             tilemap.Coordinate = new Vector2Int(x, y);
-            Graph.Runtime.EvaluateNode(heightmap);
-            float height = heightmap.Height;
+            Graph.Runtime.Compute();
+            float height = Graph.Buffer.ReadValueFloat(0);
             ref Vector3 p = ref m_Vertices[i];
             p.y = height;
         }
