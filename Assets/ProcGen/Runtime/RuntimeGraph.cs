@@ -1,4 +1,5 @@
 ﻿using ProcGen.Connector;
+using ProcGen.Utils;
 using System.Collections.Generic;
 
 namespace ProcGen
@@ -12,17 +13,17 @@ namespace ProcGen
 
         public BaseNode TargetNode { get; private set; }
 
-        private List<int> m_EvaluationStack; 
+        private IList<int> m_SortedEvaluationTree; 
 
         internal RuntimeGraph()
         {
-            m_EvaluationStack = new List<int>();
+            m_SortedEvaluationTree = new List<int>();
         }
 
 
         public void Compute()
         {
-            InternalEvaluate(TargetNode.NodeIndex);
+            InternalEvaluate();
         }
 
         /// Legacy
@@ -46,7 +47,7 @@ namespace ProcGen
 
         internal void Initialize(int mainNodeIndex)
         {
-            m_EvaluationStack.Capacity = Nodes.Length;
+            //m_EvaluationStack.Capacity = Nodes.Length;
 
             if (mainNodeIndex != -1 && Nodes[mainNodeIndex] is IMasterNode )
             {
@@ -60,42 +61,22 @@ namespace ProcGen
             }
         }
 
+        internal void ComputeExecutionTree()
+        {
+            m_SortedEvaluationTree = GraphTree.ComputeExecutionTree(Nodes, TargetNode.NodeIndex);
+        }
+
         public void SetMasterNode(BaseNode node)
         {
             TargetNode = node;
         }
 
-        private void InternalEvaluate(int targetNode)
+        private void InternalEvaluate()
         {
-            int offset = 0;
-            m_EvaluationStack.Add(targetNode);
-
-            // breadthfirst traversal
-            do
+            for(int i = 0; i < m_SortedEvaluationTree.Count; ++i)
             {
-                int nodeIndex = m_EvaluationStack[offset];
-                BaseNode currentNode = Nodes[nodeIndex];
-
-                for (int i = 0; i < currentNode.Inputs.Length; ++i)
-                {
-                    ref NodeInput connector = ref currentNode.Inputs[i];
-                    BaseNode sourceNode = connector.Source;
-
-                    if ( connector.IsConnectorValid() && !m_EvaluationStack.Contains(sourceNode.NodeIndex))
-                    {
-                        m_EvaluationStack.Add(sourceNode.NodeIndex);
-                    }
-                }
-
-            } while (++offset < m_EvaluationStack.Count);
-
-            // stack pop
-            for(int i = m_EvaluationStack.Count - 1; i >= 0; --i)
-            {
-                int nodeIndex = m_EvaluationStack[i];
-                Nodes[nodeIndex].Evaluate();
+                Nodes[m_SortedEvaluationTree[i]].Evaluate();
             }
-            m_EvaluationStack.Clear();
         }
     }
 }

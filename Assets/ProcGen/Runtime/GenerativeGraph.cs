@@ -86,6 +86,7 @@ namespace ProcGen
                 node.Inputs[defValue.Slot].Initial.Vec4 = defValue.Value;
 
             }
+            graph.ComputeExecutionTree();
             return graph;
         }
 

@@ -21,6 +21,7 @@ namespace ProcGen.Debug
         {
             if ( m_GraphHasChanged )
             {
+                Instance.Runtime.ComputeExecutionTree();
                 Instance.OnGraphUpdate?.Invoke();
                 m_GraphHasChanged = false;
             }
