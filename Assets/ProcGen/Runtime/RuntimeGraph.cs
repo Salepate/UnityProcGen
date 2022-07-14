@@ -63,7 +63,10 @@ namespace ProcGen
 
         internal void ComputeExecutionTree()
         {
-            m_SortedEvaluationTree = GraphTree.ComputeExecutionTree(Nodes, TargetNode.NodeIndex);
+            if (Nodes != null && Nodes.Length > 0 && TargetNode != null)
+                m_SortedEvaluationTree = GraphTree.ComputeExecutionTree(Nodes, TargetNode.NodeIndex);
+            else
+                m_SortedEvaluationTree = new List<int>() { };
         }
 
         public void SetMasterNode(BaseNode node)
