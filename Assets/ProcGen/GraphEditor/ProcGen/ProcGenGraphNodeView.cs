@@ -1,5 +1,6 @@
 using ProcGen;
 using ProcGen.Connector;
+using ProcGenEditor.GraphElems;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
@@ -50,6 +51,7 @@ namespace ProcGenEditor
         {
             m_PortMap = new Dictionary<Port, PortTuple>();
             m_InversePortMap = new Dictionary<PortTuple, Port>();
+            mainContainer.style.overflow = StyleKeyword.None;    // Override explicit style set in base class
         }
 
         public void Free()
@@ -156,7 +158,10 @@ namespace ProcGenEditor
             {
                 if (port.Value.Item1 == outputPorts)
                 {
-                    container.Remove(port.Key);
+                    VisualElement rootItem = port.Key;
+                    if (!outputPorts)
+                        rootItem = rootItem.parent;
+                    container.Remove(rootItem);
                     m_InversePortMap.Remove(port.Value);
                     ports.Add(port.Key);
                 }
@@ -184,7 +189,22 @@ namespace ProcGenEditor
                 var port = InstantiatePort(Orientation.Horizontal, portDir, portCapacity, portType);
                 port.portName = connectorName;
                 port.userData = connectorType;
-                container.Add(port);
+
+                if ( !outputPorts )
+                {
+                    var portContainer = new VisualElement();
+                    portContainer.style.flexDirection = FlexDirection.Row;
+                    var inputView = new NodeInputView(Node, i, NotifyDataUpdate);
+                    portContainer.Add(inputView);
+                    portContainer.Add(port);
+                    container.Add(portContainer);
+                }
+                else
+                {
+                    container.Add(port);
+                }
+
+
                 m_PortMap.Add(port, new PortTuple(outputPorts, i));
                 m_InversePortMap.Add(new PortTuple(outputPorts, i), port);
 
@@ -223,6 +243,11 @@ namespace ProcGenEditor
                 RefreshExpandedState();
             }
 
+        }
+
+        internal void NotifyDataUpdate()
+        {
+            DataUpdate?.Invoke();
         }
 
         internal void SetOrigin(Vector2 newOrigin)
