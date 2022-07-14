@@ -22,6 +22,7 @@ namespace ProcGenEditor.GraphElems
             Add(Container);
             CreateControls();
             UpdateControlVisibility();
+            pickingMode = PickingMode.Ignore;
         }
 
         public void CreateControls()
