@@ -36,11 +36,6 @@
     background-color: rgba(72, 72, 72, 0.9);
     justify-content: center;
 }
-
-ProcGenGraphNodeView {
-    overflow: visible;
-}
-
 .graphElement #title {
     background-color: rgb(72, 72, 72);
 }
@@ -60,7 +55,17 @@ ProcGenGraphNodeView {
     background-color: rgba(60, 60, 60, 255);
     border-width: 1px;
     border-color: #000000;
-    border-radius: 6px;
+    border-radius: 4px;
     flex-grow: 0;
-    margin-right: 10px;
+    margin-right: 12px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.input-view #unity-text-input {
+    min-width: 20px;
+}
+
+.input-view .unity-base-field {
+    padding-right: 4px;
 }

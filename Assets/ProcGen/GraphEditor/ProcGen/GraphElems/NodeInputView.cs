@@ -10,7 +10,8 @@ namespace ProcGenEditor.GraphElems
         private BaseNode m_Node;
         private int m_Slot;
 
-        private VisualElement Container;
+        private VisualElement m_Container;
+        private VisualElement m_Control;
         private System.Action m_UpdateAction;
         public NodeInputView(BaseNode node, int inputSlot, System.Action updateAction)
         {
@@ -18,8 +19,8 @@ namespace ProcGenEditor.GraphElems
             m_Slot = inputSlot;
             m_UpdateAction = updateAction;
             AddToClassList("input-view");
-            Container = new VisualElement() { name = "Container" };
-            Add(Container);
+            m_Container = new VisualElement() { name = "Container" };
+            Add(m_Container);
             CreateControls();
             UpdateControlVisibility();
             pickingMode = PickingMode.Ignore;
@@ -28,15 +29,13 @@ namespace ProcGenEditor.GraphElems
         public void CreateControls()
         {
             bool visible = m_Slot < m_Node.Inputs.Length;
-
-
             if (visible)
             {
                 ref NodeInput input = ref m_Node.Inputs[m_Slot];
                 if ( input.ConnectorType != ConnectorType.SourceType )
                 {
-                    Container.Add(SpawnControlElement(ref input));
-
+                    m_Control = SpawnControlElement(ref input);
+                    m_Container.Add(m_Control);
                 }
             }
         }
@@ -67,8 +66,8 @@ namespace ProcGenEditor.GraphElems
 
         public void UpdateControlVisibility()
         {
-            bool visible = m_Slot < m_Node.Inputs.Length && !m_Node.Inputs[m_Slot].IsConnectorValid();
-            Container.visible = visible;
+            bool visible = m_Control != null && m_Slot < m_Node.Inputs.Length && !m_Node.Inputs[m_Slot].IsConnectorValid();
+            m_Container.visible = visible;
         }
     }
 }
