@@ -128,12 +128,12 @@ namespace ProcGenEditor
         }
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            if ( selection.Count > 0 )
+            if ( selection.Count > 0 && evt.target is ProcGenGraphNodeView )
             {
                 evt.menu.AppendAction("Group Selection", (a) => 
                 {
                     Group group = CreateGroup("New Group");
-                    foreach(GraphElement elem in selection.OfType<GraphElement>())
+                    foreach(GraphElement elem in selection.OfType<ProcGenGraphNodeView>())
                     {
                         if ( elem is ProcGenGraphNodeView nodeView)
                         {
@@ -169,6 +169,7 @@ namespace ProcGenEditor
                 {
                     grp.CollectElements(children, (e) => true);
                     //grp.RemoveElements(children);  
+                    grp.RemoveElements(children);
                     foreach(var child in children)
                     {
                         if (child is ProcGenGraphNodeView view)
