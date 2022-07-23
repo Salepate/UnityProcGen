@@ -2,6 +2,7 @@ using ProcGen;
 using ProcGen.Connector;
 using ProcGenEditor.GraphElems;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -11,7 +12,7 @@ using UnityEngine.UIElements;
 namespace ProcGenEditor
 {
     using PortTuple = System.Tuple<bool, int>;
-    public class ProcGenGraphNodeView : Node
+    public class ProcGenGraphNodeView : Node, ICollectibleElement
     {
 
         public System.Action DataUpdate;
@@ -40,6 +41,14 @@ namespace ProcGenEditor
                 return true;
             }
             return false;
+        }
+
+        public override void CollectElements(HashSet<GraphElement> collectedElementSet, System.Func<GraphElement, bool> conditionFunc)
+        {
+            foreach(Port port in m_PortMap.Keys)
+            {
+                collectedElementSet.UnionWith(port.connections.Where(d => (d.capabilities & Capabilities.Deletable) != 0).Cast<GraphElement>());
+            }
         }
 
         public bool TryGetPort(int slotIndex, bool isOutput, out Port port)
