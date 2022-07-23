@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using ProcGen.Buffer;
 using ProcGen.Connector;
 using ProcGen.Model;
 using ProcGen.Serialization;
@@ -83,7 +84,7 @@ namespace ProcGen
             {
                 ref InputDefaultValue defValue = ref Values[i];
                 BaseNode node = graph.Nodes[defValue.Node];
-                node.Inputs[defValue.Slot].Initial.Vec4 = defValue.Value;
+                node.Inputs[defValue.Slot].Initial = defValue.Value;
 
             }
             graph.ComputeExecutionTree();
@@ -105,7 +106,7 @@ namespace ProcGen
                 else
                 {
                     // add default value?
-                    values.Add(new InputDefaultValue(nodeIndex, i, input.Initial.Vec4));
+                    values.Add(new InputDefaultValue(nodeIndex, i, input.Initial));
                 }
             }
         }
@@ -130,9 +131,9 @@ namespace ProcGen
         {
             public int Node;
             public int Slot;
-            public Vector4 Value;
+            public ValueBuffer Value;
 
-            public InputDefaultValue(int node, int slot, Vector4 value)
+            public InputDefaultValue(int node, int slot, ValueBuffer value)
             {
                 Node = node;
                 Slot = slot;

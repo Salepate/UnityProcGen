@@ -1,6 +1,8 @@
 using ProcGen;
 using ProcGen.Connector;
+using ProcGenEditor.GraphElems;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -10,7 +12,7 @@ using UnityEngine.UIElements;
 namespace ProcGenEditor
 {
     using PortTuple = System.Tuple<bool, int>;
-    public class ProcGenGraphNodeView : Node
+    public class ProcGenGraphNodeView : Node, ICollectibleElement
     {
 
         public System.Action DataUpdate;
@@ -41,6 +43,14 @@ namespace ProcGenEditor
             return false;
         }
 
+        public override void CollectElements(HashSet<GraphElement> collectedElementSet, System.Func<GraphElement, bool> conditionFunc)
+        {
+            foreach(Port port in m_PortMap.Keys)
+            {
+                collectedElementSet.UnionWith(port.connections.Where(d => (d.capabilities & Capabilities.Deletable) != 0).Cast<GraphElement>());
+            }
+        }
+
         public bool TryGetPort(int slotIndex, bool isOutput, out Port port)
         {
             return m_InversePortMap.TryGetValue(new PortTuple(isOutput, slotIndex), out port);
@@ -50,6 +60,7 @@ namespace ProcGenEditor
         {
             m_PortMap = new Dictionary<Port, PortTuple>();
             m_InversePortMap = new Dictionary<PortTuple, Port>();
+            mainContainer.style.overflow = StyleKeyword.None;    // Override explicit style set in base class
         }
 
         public void Free()
@@ -156,7 +167,10 @@ namespace ProcGenEditor
             {
                 if (port.Value.Item1 == outputPorts)
                 {
-                    container.Remove(port.Key);
+                    VisualElement rootItem = port.Key;
+                    if (!outputPorts)
+                        rootItem = rootItem.parent;
+                    container.Remove(rootItem);
                     m_InversePortMap.Remove(port.Value);
                     ports.Add(port.Key);
                 }
@@ -184,7 +198,22 @@ namespace ProcGenEditor
                 var port = InstantiatePort(Orientation.Horizontal, portDir, portCapacity, portType);
                 port.portName = connectorName;
                 port.userData = connectorType;
-                container.Add(port);
+
+                if ( !outputPorts )
+                {
+                    var portContainer = new VisualElement();
+                    portContainer.style.flexDirection = FlexDirection.Row;
+                    var inputView = new NodeInputView(Node, i, NotifyDataUpdate);
+                    portContainer.Add(inputView);
+                    portContainer.Add(port);
+                    container.Add(portContainer);
+                }
+                else
+                {
+                    container.Add(port);
+                }
+
+
                 m_PortMap.Add(port, new PortTuple(outputPorts, i));
                 m_InversePortMap.Add(new PortTuple(outputPorts, i), port);
 
@@ -223,6 +252,11 @@ namespace ProcGenEditor
                 RefreshExpandedState();
             }
 
+        }
+
+        internal void NotifyDataUpdate()
+        {
+            DataUpdate?.Invoke();
         }
 
         internal void SetOrigin(Vector2 newOrigin)

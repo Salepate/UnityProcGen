@@ -78,6 +78,7 @@ namespace ProcGenEditor
                 else
                 {
                     nodeView.Node.Inputs[slotIndex].Connect(sourceNode, sourceSlot);
+                    edge.input.parent.Q<NodeInputView>()?.UpdateControlVisibility();
                     refreshGraph = true;
                 }
             }
@@ -105,6 +106,7 @@ namespace ProcGenEditor
                         {
                             inputNode.TryGetPortData(edge.input, out int edgeSlot, out _);
                             inputNode.Node.Inputs[edgeSlot].Connect(null, 0);
+                            edge.input.parent.Q<NodeInputView>()?.UpdateControlVisibility();
                         }
                         refreshGraph = true;
                     }

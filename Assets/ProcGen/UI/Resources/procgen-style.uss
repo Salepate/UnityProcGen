@@ -36,7 +36,36 @@
     background-color: rgba(72, 72, 72, 0.9);
     justify-content: center;
 }
-
 .graphElement #title {
     background-color: rgb(72, 72, 72);
+}
+
+.input-view {
+    left: -224px;
+    position: absolute;
+    flex-direction: row;
+    justify-content: flex-end;
+    height: 22px;
+    padding-top: 1px;
+    width: 232px;
+}
+
+.input-view > #Container {
+    flex-direction: row;
+    background-color: rgba(60, 60, 60, 255);
+    border-width: 1px;
+    border-color: #000000;
+    border-radius: 4px;
+    flex-grow: 0;
+    margin-right: 12px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.input-view #unity-text-input {
+    min-width: 20px;
+}
+
+.input-view .unity-base-field {
+    padding-right: 4px;
 }

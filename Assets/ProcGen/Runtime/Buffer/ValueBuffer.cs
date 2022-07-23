@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ProcGen.Buffer
 {
+    [System.Serializable]
     [StructLayout(LayoutKind.Explicit)]
     public struct ValueBuffer
     {
